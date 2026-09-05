@@ -1,0 +1,19 @@
+// Animatio — animate.style parity. PLAN.md §6
+//
+// Nothing here is hand-written: every keyframe is generated from
+// src/effects/manifest.json, which tools/import-animate-css.mjs derives from the
+// pinned animate.css 4.1.1 fixture. That is what keeps the visual result
+// byte-identical while making distances, angles and origins tunable (§6.1).
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "../lib/mixins" as m;
+@use "manifest" as man;
+
+@if emits("parity") {
+  @include l.layer(effects) {
+    @each $name, $entry in man.$parity {
+      @include m.effect($name, $entry);
+    }
+  }
+}

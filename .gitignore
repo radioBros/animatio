@@ -1,0 +1,25 @@
+node_modules/
+dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+test/treeshake/*/out.css
+*.log
+.DS_Store
+.gstack/
+
+# ----------------------------------------------------------------- internal
+# Working notes and the original design record. Neither describes what ships:
+# PLAN.md names 113 classes that no longer exist, and TODO.md is a running
+# conversation. dist/catalogue.json is the source of truth for the API.
+TODO.md
+PLAN.md
+
+# Font Awesome Pro duotone. A licence to USE these is not a licence to
+# redistribute the files, so they are fetched at build time by
+# `npm run docs:icons` rather than committed. Do not remove this line.
+docs/.vitepress/theme/icons/
+
+# A full copy of a competitor's stylesheet, kept locally only so
+# `npm run import:animate` can diff the two catalogues. Nothing builds from it.
+test/fixtures/animate-4.1.1.css
+

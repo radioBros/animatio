@@ -1,0 +1,318 @@
+// Animatio — ambient backgrounds. PLAN.md §10.5
+//
+// All decorative, all pointer-events:none, all paused under reduced motion.
+// The ◑ ones (snow, confetti, shapes, constellation) need n children; each
+// child consumes --an-i so one v-for / .map() drives the whole field.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  #{s("bg-gradient-anim")} {
+    background-image: linear-gradient(
+      #{v(bg-angle, 120deg)},
+      #{v(bg-from, #1b2a6b)},
+      #{v(bg-via, #6b2a8f)},
+      #{v(bg-to, #1b2a6b)}
+    );
+    background-size: 220% 220%;
+    animation-name: #{kf("bg-pan")};
+    animation-duration: #{v(duration, 14s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  @keyframes #{kf("bg-pan")} {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  #{s("bg-mesh")} {
+    background-color: #{v(bg-base, #0b1020)};
+    background-image:
+      radial-gradient(at 18% 22%, #{v(mesh-1, #3d5afe)} 0, transparent 52%),
+      radial-gradient(at 82% 18%, #{v(mesh-2, #ff4081)} 0, transparent 48%),
+      radial-gradient(at 24% 82%, #{v(mesh-3, #00e5ff)} 0, transparent 46%),
+      radial-gradient(at 78% 76%, #{v(mesh-4, #ffab00)} 0, transparent 44%);
+  }
+
+  #{s("bg-aurora")} {
+    position: relative;
+    overflow: hidden;
+    background: #{v(bg-base, #050914)};
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      pointer-events: none;
+      background:
+        radial-gradient(40% 28% at 30% 40%, #3ef0c8 0, transparent 60%),
+        radial-gradient(36% 26% at 68% 34%, #6a8bff 0, transparent 62%),
+        radial-gradient(44% 30% at 50% 66%, #c46aff 0, transparent 64%);
+      filter: blur(48px) saturate(1.4);
+      opacity: 0.65;
+      animation-name: #{kf("aurora")};
+      animation-duration: #{v(duration, 18s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+  }
+
+  @keyframes #{kf("aurora")} {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    }
+    33% {
+      transform: translate3d(4%, -3%, 0) rotate(6deg) scale(1.1);
+    }
+    66% {
+      transform: translate3d(-5%, 4%, 0) rotate(-5deg) scale(1.05);
+    }
+  }
+
+  #{s("bg-plasma")} {
+    background:
+      radial-gradient(circle at 20% 30%, #ff2e88 0, transparent 45%),
+      radial-gradient(circle at 78% 24%, #2effd5 0, transparent 42%),
+      radial-gradient(circle at 46% 78%, #7a5cff 0, transparent 48%),
+      #{v(bg-base, #06070f)};
+    background-size: 180% 180%;
+    filter: blur(#{v(plasma-blur, 0px)});
+    animation-name: #{kf("bg-pan")};
+    animation-duration: #{v(duration, 20s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  #{s("bg-conic-spin")} {
+    background-image: conic-gradient(
+      from #{v(beam-angle, 0deg)},
+      #{v(bg-from, #6ea8ff)},
+      #{v(bg-to, #b07bff)},
+      #{v(bg-from, #6ea8ff)}
+    );
+    animation-name: #{kf("conic-spin")};
+    animation-duration: #{v(duration, 9s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  @keyframes #{kf("conic-spin")} {
+    to {
+      #{prop(beam-angle)}: 360deg;
+    }
+  }
+
+  // ----------------------------------------------------------------- patterns
+  #{s("bg-grid")} {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, currentColor #{v(grid-alpha, 8%)}, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, currentColor #{v(grid-alpha, 8%)}, transparent) 1px,
+        transparent 1px
+      );
+    background-size: #{v(grid-size, 32px)} #{v(grid-size, 32px)};
+  }
+
+  #{s("bg-dots")} {
+    background-image: radial-gradient(
+      color-mix(in oklab, currentColor #{v(grid-alpha, 14%)}, transparent) 1px,
+      transparent 1px
+    );
+    background-size: #{v(grid-size, 18px)} #{v(grid-size, 18px)};
+  }
+
+  // A 45deg repeating gradient with no background-size is one image the size of
+  // the element, and background-repeat then tiles THAT image. The pattern only
+  // meets across the join when the element happens to be an exact multiple of
+  // the stripe period wide, so the seam showed up as a glitch marching in from
+  // the left edge.
+  //
+  // Sizing it to one lattice tile fixes it: at 45deg a square of side
+  // 2w * sqrt(2) shifts the pattern exactly one period along the gradient axis
+  // in BOTH directions, so every join is continuous — and the animation then
+  // travels exactly one tile, which is what makes the loop invisible.
+  // One Sass variable, so the tile size has a single definition here without
+  // becoming a custom property a consumer could unset out from under the
+  // keyframe (check:var-fallbacks is right to reject that).
+  $tile: calc(#{v(stripe-width, 10px)} * 2.8284271);
+
+  #{s("bg-stripes-march")} {
+    background-image: repeating-linear-gradient(
+      45deg,
+      color-mix(in oklab, currentColor #{v(stripe-alpha, 8%)}, transparent)
+        0 #{v(stripe-width, 10px)},
+      transparent #{v(stripe-width, 10px)} calc(#{v(stripe-width, 10px)} * 2)
+    );
+    background-size: #{$tile} #{$tile};
+    animation-name: #{kf("stripes-march")};
+    animation-duration: #{v(duration, 1.6s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  @keyframes #{kf("stripes-march")} {
+    to {
+      background-position: #{$tile} 0;
+    }
+  }
+
+  #{s("bg-topographic")} {
+    background-image: repeating-radial-gradient(
+      circle at 30% 40%,
+      transparent 0 18px,
+      color-mix(in oklab, currentColor 10%, transparent) 18px 19px
+    );
+  }
+
+  #{s("bg-waves")} {
+    background-image: repeating-radial-gradient(
+      circle at 50% 120%,
+      transparent 0 22px,
+      color-mix(in oklab, currentColor 9%, transparent) 22px 24px
+    );
+  }
+
+
+  #{s("bg-vignette")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        120% 120% at 50% 50%,
+        transparent 52%,
+        hsl(#{v(shadow-color, 220 15% 10%)} / #{v(vignette-strength, 0.55)}) 100%
+      );
+    }
+  }
+
+  #{s("bg-spotlight-static")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(
+        #{v(spotlight-size, 320px)} circle at 50% 50%,
+        color-mix(in oklab, #{v(glow-color, #fff)} #{v(spotlight-strength, 42%)}, transparent),
+        transparent 70%
+      );
+    }
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  // --------------------------------------------------------------- atmosphere
+  #{s("bg-fog")} {
+    position: relative;
+    overflow: hidden;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      pointer-events: none;
+      background: radial-gradient(
+        60% 40% at 40% 60%,
+        color-mix(in oklab, #fff 22%, transparent),
+        transparent 70%
+      );
+      filter: blur(28px);
+      animation-name: #{kf("fog-drift")};
+      animation-duration: #{v(duration, 26s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+  }
+  @keyframes #{kf("fog-drift")} {
+    0%, 100% {
+      transform: translate3d(-6%, 0, 0);
+    }
+    50% {
+      transform: translate3d(8%, -4%, 0);
+    }
+  }
+
+  #{s("bg-bokeh")} {
+    position: relative;
+    overflow: hidden;
+    > * {
+      position: absolute;
+      border-radius: 50%;
+      background: color-mix(in oklab, #{v(glow-color, #fff)} 40%, transparent);
+      filter: blur(#{v(bokeh-blur, 10px)});
+      animation-name: #{kf("bokeh-float")};
+      animation-duration: calc(#{v(duration, 16s)} + var(--an-i, 0) * 1.6s);
+      animation-delay: calc(var(--an-i, 0) * -2s);
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+  }
+  @keyframes #{kf("bokeh-float")} {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translate3d(4vw, -6vh, 0) scale(1.25);
+      opacity: 0.9;
+    }
+  }
+
+
+  #{s("bg-warp")} {
+    position: relative;
+    overflow: hidden;
+    background: #{v(bg-base, #02030a)};
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg 1.6deg,
+        color-mix(in oklab, #fff 55%, transparent) 1.6deg 1.8deg
+      );
+      mask-image: radial-gradient(closest-side, transparent 8%, #000 60%);
+      animation-name: #{kf("warp")};
+      animation-duration: #{v(duration, 3.2s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+  @keyframes #{kf("warp")} {
+    from {
+      transform: scale(0.2);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    to {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+
+  // ------------------------------------------------------- particle fields (◑)
+
+
+
+
+
+
+}

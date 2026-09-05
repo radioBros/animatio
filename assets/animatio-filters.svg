@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Animatio SVG filter sprite.  PLAN.md §9.5
+
+  A CSS package cannot ship DOM, so this is a documented ONE-TIME install step.
+  Paste the contents into your page (near </body>, or in your app shell):
+
+    <svg width="0" height="0" aria-hidden="true"
+         style="position:absolute;pointer-events:none">
+      ... the <defs> below ...
+    </svg>
+
+  Only the an-svg-* classes need it. Every other class in the library works
+  without this file, which is why the prefix exists — the class name tells you
+  whether the install step applies (check:svg-naming enforces that).
+
+  NOTE: these are referenced with `filter: url(#id)` on the ELEMENT, which works
+  cross-browser. `backdrop-filter: url(#id)` does NOT — WebKit parses it and
+  renders nothing (bugs.webkit.org #245510), which is why refraction over a
+  backdrop is opt-in via [data-an-refract="on"] rather than gated on @supports.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true"
+     focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+
+    <!-- Gooey merge. feGaussianBlur softens, feColorMatrix crushes the alpha
+         ramp into a hard edge, so overlapping blurred shapes FUSE. The last
+         two numbers are the contrast (20) and threshold (-9); raise the
+         threshold to make blobs separate sooner. -->
+    <filter id="an-goo" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix"
+        values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 20 -9" result="goo"/>
+      <feBlend in="SourceGraphic" in2="goo"/>
+    </filter>
+
+    <!-- Refraction. Fractal noise, softened, then used to displace the source.
+         `scale` is the strength; 40 is a strong glass edge, 12 is subtle. -->
+    <filter id="an-glass-real" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012"
+                    numOctaves="2" seed="7" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
+      <feDisplacementMap in="SourceGraphic" in2="soft" scale="40"
+                         xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <!-- Water / caustic wobble: lower frequency, animated seed not required. -->
+
+    <!-- Ripple: tight rings, small displacement. -->
+
+    <!-- Warp: broad, low-frequency distortion for flags and datamosh. -->
+
+    <!-- Melt: vertical-only displacement, strong. -->
+
+    <!-- Shatter: high-frequency turbulence with a hard alpha edge. -->
+
+    <!-- Roughened letterforms. Small scale so text stays readable. -->
+
+    <!-- Duotone. Edit the two feFuncR/G/B tables to change the palette:
+         index 0 is the shadow colour, index 1 the highlight. -->
+
+  </defs>
+</svg>

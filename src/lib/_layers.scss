@@ -1,0 +1,29 @@
+// Animatio — cascade layers. PLAN.md §3.3
+//
+// Any UN-LAYERED consumer CSS beats the whole library, so there are no
+// !important wars. `animatio.props` sits after `animatio.effects` so a
+// [data-an-speed] attribute wins over an effect's own duration with no
+// specificity hacks.
+
+@use "../config";
+
+$order: tokens, base, effects, atoms, scroll, surfaces, fx, vt, props, util;
+
+@mixin statement {
+  @if config.$use-layers {
+    @layer animatio.tokens, animatio.base, animatio.effects, animatio.atoms,
+      animatio.scroll, animatio.surfaces, animatio.fx, animatio.vt,
+      animatio.props, animatio.util;
+  }
+}
+
+/// Wrap content in one of the declared layers.
+@mixin layer($name) {
+  @if config.$use-layers {
+    @layer animatio.#{$name} {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}

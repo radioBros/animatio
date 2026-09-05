@@ -1,0 +1,4123 @@
+{
+  "bounce": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounce",
+    "channels": [
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-bounce"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "translate3d(0, 0, 0)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "transform": "translate3d(0, -28px, 0) scaleY(1.06)"
+      },
+      "62%": {
+        "transform": "translate3d(0, -12px, 0) scaleY(1.02)"
+      },
+      "82%": {
+        "transform": "translate3d(0, -4px, 0)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center bottom)"
+    }
+  },
+  "flash": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flash",
+    "channels": [
+      "o"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-flash"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 46%, 100%": {
+        "opacity": "1"
+      },
+      "23%, 69%": {
+        "opacity": "0"
+      }
+    }
+  },
+  "pulse": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:pulse",
+    "channels": [
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-pulse"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "50%": {
+        "transform": "scale3d(1.09, 1.09, 1)"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-in-out"
+    }
+  },
+  "rubberBand": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rubberBand",
+    "channels": [
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-rubberBand"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "24%": {
+        "transform": "scale3d(1.28, 0.76, 1)"
+      },
+      "42%": {
+        "transform": "scale3d(0.78, 1.22, 1)"
+      },
+      "58%": {
+        "transform": "scale3d(1.13, 0.89, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(0.96, 1.04, 1)"
+      }
+    }
+  },
+  "shakeX": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:shakeX",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-shakeX"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "13%": {
+        "transform": "translate3d(11px, 0, 0)"
+      },
+      "25%": {
+        "transform": "translate3d(-11px, 0, 0)"
+      },
+      "38%": {
+        "transform": "translate3d(11px, 0, 0)"
+      },
+      "50%": {
+        "transform": "translate3d(-11px, 0, 0)"
+      },
+      "63%": {
+        "transform": "translate3d(11px, 0, 0)"
+      },
+      "75%": {
+        "transform": "translate3d(-11px, 0, 0)"
+      },
+      "88%": {
+        "transform": "translate3d(11px, 0, 0)"
+      }
+    }
+  },
+  "shakeY": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:shakeY",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-shakeY"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "13%": {
+        "transform": "translate3d(0, 11px, 0)"
+      },
+      "25%": {
+        "transform": "translate3d(0, -11px, 0)"
+      },
+      "38%": {
+        "transform": "translate3d(0, 11px, 0)"
+      },
+      "50%": {
+        "transform": "translate3d(0, -11px, 0)"
+      },
+      "63%": {
+        "transform": "translate3d(0, 11px, 0)"
+      },
+      "75%": {
+        "transform": "translate3d(0, -11px, 0)"
+      },
+      "88%": {
+        "transform": "translate3d(0, 11px, 0)"
+      }
+    }
+  },
+  "headShake": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:headShake",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-headShake"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "translateX(0) rotateY(0)"
+      },
+      "16%": {
+        "transform": "translateX(-7px) rotateY(-6deg)"
+      },
+      "40%": {
+        "transform": "translateX(5px) rotateY(4deg)"
+      },
+      "64%": {
+        "transform": "translateX(-3px) rotateY(-2deg)"
+      },
+      "84%": {
+        "transform": "translateX(1px) rotateY(0)"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-in-out"
+    }
+  },
+  "swing": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:swing",
+    "channels": [
+      "ry",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-swing"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "top center"
+      },
+      "22%": {
+        "transform": "rotate3d(0, 0, 1, 16deg)",
+        "transform-origin": "top center"
+      },
+      "46%": {
+        "transform": "rotate3d(0, 0, 1, -11deg)",
+        "transform-origin": "top center"
+      },
+      "68%": {
+        "transform": "rotate3d(0, 0, 1, 6deg)",
+        "transform-origin": "top center"
+      },
+      "86%": {
+        "transform": "rotate3d(0, 0, 1, -3deg)",
+        "transform-origin": "top center"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, top center)"
+    }
+  },
+  "tada": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:tada",
+    "channels": [
+      "rz",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-tada"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "scale3d(1, 1, 1) rotate3d(0, 0, 1, 0deg)"
+      },
+      "14%": {
+        "transform": "scale3d(0.92, 0.92, 1) rotate3d(0, 0, 1, -4deg)"
+      },
+      "34%, 58%, 82%": {
+        "transform": "scale3d(1.12, 1.12, 1) rotate3d(0, 0, 1, 4deg)"
+      },
+      "46%, 70%": {
+        "transform": "scale3d(1.12, 1.12, 1) rotate3d(0, 0, 1, -4deg)"
+      }
+    }
+  },
+  "wobble": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:wobble",
+    "channels": [
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-wobble"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg)"
+      },
+      "18%": {
+        "transform": "translate3d(-22%, 0, 0) rotate3d(0, 0, 1, -6deg)"
+      },
+      "36%": {
+        "transform": "translate3d(17%, 0, 0) rotate3d(0, 0, 1, 4deg)"
+      },
+      "54%": {
+        "transform": "translate3d(-11%, 0, 0) rotate3d(0, 0, 1, -3deg)"
+      },
+      "72%": {
+        "transform": "translate3d(6%, 0, 0) rotate3d(0, 0, 1, 2deg)"
+      }
+    }
+  },
+  "jello": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:jello",
+    "channels": [
+      "kx",
+      "ky",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-jello"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "skewX(0deg) skewY(0deg)"
+      },
+      "18%": {
+        "transform": "skewX(13deg) skewY(13deg)"
+      },
+      "32%": {
+        "transform": "skewX(-7.28deg) skewY(-7.28deg)"
+      },
+      "45%": {
+        "transform": "skewX(4.08deg) skewY(4.08deg)"
+      },
+      "59%": {
+        "transform": "skewX(-2.28deg) skewY(-2.28deg)"
+      },
+      "72%": {
+        "transform": "skewX(1.28deg) skewY(1.28deg)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center)"
+    }
+  },
+  "heartBeat": {
+    "family": "attention",
+    "category": "attention",
+    "module": "effects/attention",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:heartBeat",
+    "channels": [
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-heartBeat"
+    ],
+    "animates": true,
+    "raw": {
+      "0%, 100%": {
+        "transform": "scale(1)"
+      },
+      "16%": {
+        "transform": "scale(1.24)"
+      },
+      "32%": {
+        "transform": "scale(1)"
+      },
+      "48%": {
+        "transform": "scale(1.24)"
+      },
+      "68%": {
+        "transform": "scale(1)"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 1.3)",
+      "animation-timing-function": "ease-in-out"
+    }
+  },
+  "backInDown": {
+    "family": "back",
+    "category": "entrance",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backInDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-backInDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0) scale(0.62)"
+      },
+      "62%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      }
+    }
+  },
+  "backInLeft": {
+    "family": "back",
+    "category": "entrance",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backInLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-backInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0) scale(0.62)"
+      },
+      "62%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      }
+    }
+  },
+  "backInRight": {
+    "family": "back",
+    "category": "entrance",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backInRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-backInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0) scale(0.62)"
+      },
+      "62%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      }
+    }
+  },
+  "backInUp": {
+    "family": "back",
+    "category": "entrance",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backInUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-backInUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance, 100%), 0) scale(0.62)"
+      },
+      "62%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      }
+    }
+  },
+  "backOutDown": {
+    "family": "back",
+    "category": "exit",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backOutDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-backOutDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(0 * -1), calc(calc(var(--an-distance, 100%) * -1) * -1), 0) scale(0.62)"
+      }
+    }
+  },
+  "backOutLeft": {
+    "family": "back",
+    "category": "exit",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backOutLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-backOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(calc(var(--an-distance, 100%) * -1) * -1), calc(0 * -1), 0) scale(0.62)"
+      }
+    }
+  },
+  "backOutRight": {
+    "family": "back",
+    "category": "exit",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backOutRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-backOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), calc(0 * -1), 0) scale(0.62)"
+      }
+    }
+  },
+  "backOutUp": {
+    "family": "back",
+    "category": "exit",
+    "module": "effects/back",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:backOutUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-backOutUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(1)"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) scale(0.62)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(0 * -1), calc(var(--an-distance, 100%) * -1), 0) scale(0.62)"
+      }
+    }
+  },
+  "bounceIn": {
+    "family": "bounce",
+    "category": "entrance",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceIn",
+    "channels": [
+      "o",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-bounceIn"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.66, 0.66, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "scale3d(1.11, 1.11, 1)"
+      },
+      "62%": {
+        "transform": "scale3d(0.945, 0.945, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(1.028, 1.028, 1)"
+      },
+      "85%": {
+        "transform": "scale3d(0.986, 0.986, 1)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 0.75)"
+    }
+  },
+  "bounceInDown": {
+    "family": "bounce",
+    "category": "entrance",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceInDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceInDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0) scale3d(0.66, 0.66, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "scale3d(1.11, 1.11, 1)"
+      },
+      "62%": {
+        "transform": "scale3d(0.945, 0.945, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(1.028, 1.028, 1)"
+      },
+      "85%": {
+        "transform": "scale3d(0.986, 0.986, 1)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      }
+    }
+  },
+  "bounceInLeft": {
+    "family": "bounce",
+    "category": "entrance",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceInLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0) scale3d(0.66, 0.66, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "scale3d(1.11, 1.11, 1)"
+      },
+      "62%": {
+        "transform": "scale3d(0.945, 0.945, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(1.028, 1.028, 1)"
+      },
+      "85%": {
+        "transform": "scale3d(0.986, 0.986, 1)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      }
+    }
+  },
+  "bounceInRight": {
+    "family": "bounce",
+    "category": "entrance",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceInRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0) scale3d(0.66, 0.66, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "scale3d(1.11, 1.11, 1)"
+      },
+      "62%": {
+        "transform": "scale3d(0.945, 0.945, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(1.028, 1.028, 1)"
+      },
+      "85%": {
+        "transform": "scale3d(0.986, 0.986, 1)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      }
+    }
+  },
+  "bounceInUp": {
+    "family": "bounce",
+    "category": "entrance",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceInUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceInUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance, 100%), 0) scale3d(0.66, 0.66, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "38%": {
+        "opacity": "1",
+        "transform": "scale3d(1.11, 1.11, 1)"
+      },
+      "62%": {
+        "transform": "scale3d(0.945, 0.945, 1)"
+      },
+      "76%": {
+        "transform": "scale3d(1.028, 1.028, 1)"
+      },
+      "85%": {
+        "transform": "scale3d(0.986, 0.986, 1)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      }
+    }
+  },
+  "bounceOut": {
+    "family": "bounce",
+    "category": "exit",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceOut",
+    "channels": [
+      "o",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-bounceOut"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "26%": {
+        "transform": "scale3d(1.08, 1.08, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.72, 0.72, 1)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 0.75)"
+    }
+  },
+  "bounceOutDown": {
+    "family": "bounce",
+    "category": "exit",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceOutDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceOutDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "26%": {
+        "transform": "scale3d(1.08, 1.08, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(0 * -1), calc(calc(var(--an-distance, 100%) * -1) * -1), 0) scale3d(0.72, 0.72, 1)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    }
+  },
+  "bounceOutLeft": {
+    "family": "bounce",
+    "category": "exit",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceOutLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "26%": {
+        "transform": "scale3d(1.08, 1.08, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(calc(var(--an-distance, 100%) * -1) * -1), calc(0 * -1), 0) scale3d(0.72, 0.72, 1)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    }
+  },
+  "bounceOutRight": {
+    "family": "bounce",
+    "category": "exit",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceOutRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "26%": {
+        "transform": "scale3d(1.08, 1.08, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), calc(0 * -1), 0) scale3d(0.72, 0.72, 1)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    }
+  },
+  "bounceOutUp": {
+    "family": "bounce",
+    "category": "exit",
+    "module": "effects/bounce",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:bounceOutUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-bounceOutUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "26%": {
+        "transform": "scale3d(1.08, 1.08, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(0 * -1), calc(var(--an-distance, 100%) * -1), 0) scale3d(0.72, 0.72, 1)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    }
+  },
+  "fadeIn": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeIn",
+    "channels": [
+      "o"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-fadeIn"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0"
+      },
+      "100%": {
+        "opacity": "1"
+      }
+    }
+  },
+  "fadeInDown": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInDown",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInDownBig": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInDownBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeInDownBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance-big, 2000px) * -1), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInLeft": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInLeftBig": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInLeftBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeInLeftBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance-big, 2000px) * -1), 0, 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInRight": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInRightBig": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInRightBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeInRightBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance-big, 2000px), 0, 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInUp": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInUp",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance, 100%), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInUpBig": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInUpBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeInUpBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance-big, 2000px), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInTopLeft": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInTopLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInTopLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), calc(var(--an-distance, 100%) * -1), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInTopRight": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInTopRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInTopRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), calc(var(--an-distance, 100%) * -1), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInBottomLeft": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInBottomLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInBottomLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), var(--an-distance, 100%), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeInBottomRight": {
+    "family": "fade",
+    "category": "entrance",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeInBottomRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeInBottomRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), var(--an-distance, 100%), 0)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "fadeOut": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOut",
+    "channels": [
+      "o"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-fadeOut"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0"
+      }
+    }
+  },
+  "fadeOutDown": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutDown",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance, 100%), 0)"
+      }
+    }
+  },
+  "fadeOutDownBig": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutDownBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeOutDownBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(0, var(--an-distance-big, 2000px), 0)"
+      }
+    }
+  },
+  "fadeOutLeft": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0)"
+      }
+    }
+  },
+  "fadeOutLeftBig": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutLeftBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeOutLeftBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance-big, 2000px) * -1), 0, 0)"
+      }
+    }
+  },
+  "fadeOutRight": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0)"
+      }
+    }
+  },
+  "fadeOutRightBig": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutRightBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeOutRightBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance-big, 2000px), 0, 0)"
+      }
+    }
+  },
+  "fadeOutUp": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutUp",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0)"
+      }
+    }
+  },
+  "fadeOutUpBig": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutUpBig",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-fadeOutUpBig"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(0, calc(var(--an-distance-big, 2000px) * -1), 0)"
+      }
+    }
+  },
+  "fadeOutTopLeft": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutTopLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutTopLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), calc(var(--an-distance, 100%) * -1), 0)"
+      }
+    }
+  },
+  "fadeOutTopRight": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutTopRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutTopRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), calc(var(--an-distance, 100%) * -1), 0)"
+      }
+    }
+  },
+  "fadeOutBottomLeft": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutBottomLeft",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutBottomLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), var(--an-distance, 100%), 0)"
+      }
+    }
+  },
+  "fadeOutBottomRight": {
+    "family": "fade",
+    "category": "exit",
+    "module": "effects/fade",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:fadeOutBottomRight",
+    "channels": [
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-fadeOutBottomRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), var(--an-distance, 100%), 0)"
+      }
+    }
+  },
+  "flip": {
+    "family": "flip",
+    "category": "entrance",
+    "module": "effects/flip",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flip",
+    "channels": [
+      "persp",
+      "rx",
+      "ry",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "perspective"
+    ],
+    "keyframes": [
+      "an-flip"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "perspective(var(--an-perspective, 400px)) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg)",
+        "animation-timing-function": "ease-out"
+      },
+      "40%": {
+        "transform": "perspective(var(--an-perspective, 400px)) scale3d(1, 1, 1) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg)",
+        "animation-timing-function": "ease-out"
+      },
+      "50%": {
+        "transform": "perspective(var(--an-perspective, 400px)) scale3d(1, 1, 1) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg)",
+        "animation-timing-function": "ease-in"
+      },
+      "80%": {
+        "transform": "perspective(var(--an-perspective, 400px)) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg)",
+        "animation-timing-function": "ease-in"
+      },
+      "100%": {
+        "transform": "perspective(var(--an-perspective, 400px)) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg)",
+        "animation-timing-function": "ease-in"
+      }
+    },
+    "rule": {
+      "backface-visibility": "visible"
+    }
+  },
+  "flipInX": {
+    "family": "flip",
+    "category": "entrance",
+    "module": "effects/flip",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flipInX",
+    "channels": [
+      "o",
+      "persp",
+      "rx",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "perspective"
+    ],
+    "keyframes": [
+      "an-flipInX"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, 82deg)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      },
+      "48%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, -16deg)"
+      },
+      "76%": {
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, 7deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, 0deg)"
+      }
+    },
+    "rule": {
+      "backface-visibility": "visible"
+    }
+  },
+  "flipInY": {
+    "family": "flip",
+    "category": "entrance",
+    "module": "effects/flip",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flipInY",
+    "channels": [
+      "o",
+      "persp",
+      "ry"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "perspective"
+    ],
+    "keyframes": [
+      "an-flipInY"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, 82deg)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      },
+      "48%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, -16deg)"
+      },
+      "76%": {
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, 7deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, 0deg)"
+      }
+    },
+    "rule": {
+      "backface-visibility": "visible"
+    }
+  },
+  "flipOutX": {
+    "family": "flip",
+    "category": "exit",
+    "module": "effects/flip",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flipOutX",
+    "channels": [
+      "o",
+      "persp",
+      "rx"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "perspective"
+    ],
+    "keyframes": [
+      "an-flipOutX"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, 0deg)"
+      },
+      "34%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, -18deg)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(1, 0, 0, 82deg)"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 0.75)",
+      "backface-visibility": "visible"
+    }
+  },
+  "flipOutY": {
+    "family": "flip",
+    "category": "exit",
+    "module": "effects/flip",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:flipOutY",
+    "channels": [
+      "o",
+      "persp",
+      "ry"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "perspective"
+    ],
+    "keyframes": [
+      "an-flipOutY"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, 0deg)"
+      },
+      "34%": {
+        "opacity": "1",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, -18deg)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "perspective(var(--an-perspective, 1200px)) rotate3d(0, 1, 0, 82deg)"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 0.75)",
+      "backface-visibility": "visible"
+    }
+  },
+  "lightSpeedInRight": {
+    "family": "lightspeed",
+    "category": "entrance",
+    "module": "effects/lightspeed",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:lightSpeedInRight",
+    "channels": [
+      "kx",
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-lightSpeedInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0) skewX(-28deg)"
+      },
+      "64%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(15.4deg)"
+      },
+      "84%": {
+        "transform": "skewX(-5.6deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(0deg)"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-out"
+    }
+  },
+  "lightSpeedInLeft": {
+    "family": "lightspeed",
+    "category": "entrance",
+    "module": "effects/lightspeed",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:lightSpeedInLeft",
+    "channels": [
+      "kx",
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-lightSpeedInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0) skewX(28deg)"
+      },
+      "64%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(-15.4deg)"
+      },
+      "84%": {
+        "transform": "skewX(5.6deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(0deg)"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-out"
+    }
+  },
+  "lightSpeedOutRight": {
+    "family": "lightspeed",
+    "category": "exit",
+    "module": "effects/lightspeed",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:lightSpeedOutRight",
+    "channels": [
+      "kx",
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-lightSpeedOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(0deg)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0) skewX(28deg)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-in"
+    }
+  },
+  "lightSpeedOutLeft": {
+    "family": "lightspeed",
+    "category": "exit",
+    "module": "effects/lightspeed",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:lightSpeedOutLeft",
+    "channels": [
+      "kx",
+      "o",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-lightSpeedOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) skewX(0deg)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0) skewX(-28deg)",
+        "animation-timing-function": "var(--an-ease-in, cubic-bezier(0.55, 0, 1, 0.45))"
+      }
+    },
+    "rule": {
+      "animation-timing-function": "ease-in"
+    }
+  },
+  "rotateIn": {
+    "family": "rotate",
+    "category": "entrance",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateIn",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateIn"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "center"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "center"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center)"
+    }
+  },
+  "rotateInDownLeft": {
+    "family": "rotate",
+    "category": "entrance",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateInDownLeft",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateInDownLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "left bottom"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "left bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, left bottom)"
+    }
+  },
+  "rotateInDownRight": {
+    "family": "rotate",
+    "category": "entrance",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateInDownRight",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateInDownRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "right bottom"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "right bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, right bottom)"
+    }
+  },
+  "rotateInUpLeft": {
+    "family": "rotate",
+    "category": "entrance",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateInUpLeft",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateInUpLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, var(--an-angle, 200deg))",
+        "transform-origin": "left bottom"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "left bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, left bottom)"
+    }
+  },
+  "rotateInUpRight": {
+    "family": "rotate",
+    "category": "entrance",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateInUpRight",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateInUpRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, var(--an-angle, 200deg))",
+        "transform-origin": "right bottom"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "right bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, right bottom)"
+    }
+  },
+  "rotateOut": {
+    "family": "rotate",
+    "category": "exit",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateOut",
+    "channels": [
+      "o",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateOut"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "center"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "center"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center)"
+    }
+  },
+  "rotateOutDownLeft": {
+    "family": "rotate",
+    "category": "exit",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateOutDownLeft",
+    "channels": [
+      "o",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateOutDownLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "left bottom"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "left bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, left bottom)"
+    }
+  },
+  "rotateOutDownRight": {
+    "family": "rotate",
+    "category": "exit",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateOutDownRight",
+    "channels": [
+      "o",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateOutDownRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "right bottom"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 200deg) * -1))",
+        "transform-origin": "right bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, right bottom)"
+    }
+  },
+  "rotateOutUpLeft": {
+    "family": "rotate",
+    "category": "exit",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateOutUpLeft",
+    "channels": [
+      "o",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateOutUpLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "left bottom"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, var(--an-angle, 200deg))",
+        "transform-origin": "left bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, left bottom)"
+    }
+  },
+  "rotateOutUpRight": {
+    "family": "rotate",
+    "category": "exit",
+    "module": "effects/rotate",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rotateOutUpRight",
+    "channels": [
+      "o",
+      "rz"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rotateOutUpRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "right bottom"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "rotate3d(0, 0, 1, var(--an-angle, 200deg))",
+        "transform-origin": "right bottom"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, right bottom)"
+    }
+  },
+  "hinge": {
+    "family": "specials",
+    "category": "exit",
+    "module": "effects/specials",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:hinge",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "angle"
+    ],
+    "keyframes": [
+      "an-hinge"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "rotate3d(0, 0, 1, 0deg)",
+        "transform-origin": "top left",
+        "animation-timing-function": "ease-in-out"
+      },
+      "22%, 54%": {
+        "transform": "rotate3d(0, 0, 1, var(--an-angle, 76deg))",
+        "transform-origin": "top left",
+        "animation-timing-function": "ease-in-out"
+      },
+      "38%, 70%": {
+        "transform": "rotate3d(0, 0, 1, calc(var(--an-angle, 76deg) * 0.72))",
+        "transform-origin": "top left",
+        "animation-timing-function": "ease-in-out"
+      },
+      "70%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "transform": "translate3d(0, 780px, 0)",
+        "opacity": "0"
+      }
+    },
+    "rule": {
+      "animation-duration": "calc(var(--an-duration, 1s) * 2)",
+      "transform-origin": "var(--an-origin, top left)"
+    }
+  },
+  "jackInTheBox": {
+    "family": "specials",
+    "category": "entrance",
+    "module": "effects/specials",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:jackInTheBox",
+    "channels": [
+      "o",
+      "rz",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-jackInTheBox"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale(0.08) rotate(28deg)",
+        "transform-origin": "center bottom"
+      },
+      "48%": {
+        "transform": "rotate(-14deg)"
+      },
+      "72%": {
+        "transform": "rotate(6deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale(1) rotate(0deg)"
+      }
+    }
+  },
+  "rollIn": {
+    "family": "specials",
+    "category": "entrance",
+    "module": "effects/specials",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rollIn",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rollIn"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0) rotate3d(0, 0, 1, -108deg)"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg)"
+      }
+    }
+  },
+  "rollOut": {
+    "family": "specials",
+    "category": "exit",
+    "module": "effects/specials",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:rollOut",
+    "channels": [
+      "o",
+      "rz",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance",
+      "angle"
+    ],
+    "keyframes": [
+      "an-rollOut"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0) rotate3d(0, 0, 1, 108deg)"
+      }
+    }
+  },
+  "zoomIn": {
+    "family": "zoom",
+    "category": "entrance",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomIn",
+    "channels": [
+      "o",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomIn"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.24, 0.24, 1)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "58%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1) translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "zoomInDown": {
+    "family": "zoom",
+    "category": "entrance",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomInDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomInDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.24, 0.24, 1) translate3d(0, calc(var(--an-distance, 100%) * -1), 0)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "58%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1) translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "zoomInLeft": {
+    "family": "zoom",
+    "category": "entrance",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomInLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.24, 0.24, 1) translate3d(calc(var(--an-distance, 100%) * -1), 0, 0)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "58%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1) translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "zoomInRight": {
+    "family": "zoom",
+    "category": "entrance",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomInRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.24, 0.24, 1) translate3d(var(--an-distance, 100%), 0, 0)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "58%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1) translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "zoomInUp": {
+    "family": "zoom",
+    "category": "entrance",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomInUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomInUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "0",
+        "transform": "scale3d(0.24, 0.24, 1) translate3d(0, var(--an-distance, 100%), 0)",
+        "animation-timing-function": "var(--an-ease-out, cubic-bezier(0.22, 1, 0.36, 1))"
+      },
+      "58%": {
+        "opacity": "1"
+      },
+      "100%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1) translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "zoomOut": {
+    "family": "zoom",
+    "category": "exit",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomOut",
+    "channels": [
+      "o",
+      "sx",
+      "sy"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin"
+    ],
+    "keyframes": [
+      "an-zoomOut"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "42%": {
+        "opacity": "1",
+        "transform": "scale3d(0.42, 0.42, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.14, 0.14, 1)"
+      }
+    }
+  },
+  "zoomOutDown": {
+    "family": "zoom",
+    "category": "exit",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomOutDown",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-zoomOutDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "42%": {
+        "opacity": "1",
+        "transform": "scale3d(0.42, 0.42, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.14, 0.14, 1) translate3d(calc(0 * -1), calc(calc(var(--an-distance, 100%) * -1) * -1), 0)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center bottom)"
+    }
+  },
+  "zoomOutLeft": {
+    "family": "zoom",
+    "category": "exit",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomOutLeft",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-zoomOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "42%": {
+        "opacity": "1",
+        "transform": "scale3d(0.42, 0.42, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.14, 0.14, 1) translate3d(calc(calc(var(--an-distance, 100%) * -1) * -1), calc(0 * -1), 0)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, left center)"
+    }
+  },
+  "zoomOutRight": {
+    "family": "zoom",
+    "category": "exit",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomOutRight",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-zoomOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "42%": {
+        "opacity": "1",
+        "transform": "scale3d(0.42, 0.42, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.14, 0.14, 1) translate3d(calc(var(--an-distance, 100%) * -1), calc(0 * -1), 0)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, right center)"
+    }
+  },
+  "zoomOutUp": {
+    "family": "zoom",
+    "category": "exit",
+    "module": "effects/zoom",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:zoomOutUp",
+    "channels": [
+      "o",
+      "sx",
+      "sy",
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance-big"
+    ],
+    "keyframes": [
+      "an-zoomOutUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "opacity": "1",
+        "transform": "scale3d(1, 1, 1)"
+      },
+      "42%": {
+        "opacity": "1",
+        "transform": "scale3d(0.42, 0.42, 1)"
+      },
+      "100%": {
+        "opacity": "0",
+        "transform": "scale3d(0.14, 0.14, 1) translate3d(calc(0 * -1), calc(var(--an-distance, 100%) * -1), 0)"
+      }
+    },
+    "rule": {
+      "transform-origin": "var(--an-origin, center bottom)"
+    }
+  },
+  "slideInDown": {
+    "family": "slide",
+    "category": "entrance",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideInDown",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideInDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0)",
+        "visibility": "visible"
+      },
+      "100%": {
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "slideInLeft": {
+    "family": "slide",
+    "category": "entrance",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideInLeft",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideInLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0)",
+        "visibility": "visible"
+      },
+      "100%": {
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "slideInRight": {
+    "family": "slide",
+    "category": "entrance",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideInRight",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideInRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0)",
+        "visibility": "visible"
+      },
+      "100%": {
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "slideInUp": {
+    "family": "slide",
+    "category": "entrance",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideInUp",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideInUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, var(--an-distance, 100%), 0)",
+        "visibility": "visible"
+      },
+      "100%": {
+        "transform": "translate3d(0, 0, 0)"
+      }
+    }
+  },
+  "slideOutDown": {
+    "family": "slide",
+    "category": "exit",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideOutDown",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideOutDown"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "visibility": "hidden",
+        "transform": "translate3d(0, var(--an-distance, 100%), 0)"
+      }
+    }
+  },
+  "slideOutLeft": {
+    "family": "slide",
+    "category": "exit",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideOutLeft",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideOutLeft"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "visibility": "hidden",
+        "transform": "translate3d(calc(var(--an-distance, 100%) * -1), 0, 0)"
+      }
+    }
+  },
+  "slideOutRight": {
+    "family": "slide",
+    "category": "exit",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideOutRight",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideOutRight"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "visibility": "hidden",
+        "transform": "translate3d(var(--an-distance, 100%), 0, 0)"
+      }
+    }
+  },
+  "slideOutUp": {
+    "family": "slide",
+    "category": "exit",
+    "module": "effects/slide",
+    "mode": "fast",
+    "support": "core",
+    "parity": "animate.css:slideOutUp",
+    "channels": [
+      "x",
+      "y"
+    ],
+    "tokens": [
+      "duration",
+      "delay",
+      "ease",
+      "iterations",
+      "direction",
+      "fill",
+      "play",
+      "origin",
+      "distance"
+    ],
+    "keyframes": [
+      "an-slideOutUp"
+    ],
+    "animates": true,
+    "raw": {
+      "0%": {
+        "transform": "translate3d(0, 0, 0)"
+      },
+      "100%": {
+        "visibility": "hidden",
+        "transform": "translate3d(0, calc(var(--an-distance, 100%) * -1), 0)"
+      }
+    }
+  }
+}

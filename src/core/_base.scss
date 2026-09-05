@@ -1,0 +1,29 @@
+// Animatio — the engine class. PLAN.md §4.2
+//
+// RULE §2.1: longhands only. The `animation` shorthand resets
+// animation-timeline / animation-range / animation-trigger to initial, which
+// would silently kill the entire scroll module depending on cascade order.
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "../lib/mixins" as m;
+
+@include l.layer(base) {
+  .#{p()} {
+    animation-duration: v(duration, 1s);
+    animation-delay: v(delay, 0s);
+    animation-timing-function: v(ease, ease);
+    animation-iteration-count: v(iterations, 1);
+    animation-direction: v(direction, normal);
+    animation-fill-mode: v(fill, both);
+    animation-play-state: v(play, running);
+    transform-origin: v(origin, 50% 50%);
+  }
+
+  // Explicit opt-in alias for the composed transform. Atoms carry the assembly
+  // themselves (see atoms/_index.scss), so this is only needed when hand-driving
+  // the channels from your own CSS.
+  //
+  // Named an-compose, not an--compose: the double dash read as a typo, and this
+  // is a peer of the atoms rather than a BEM modifier of the engine class.
+}

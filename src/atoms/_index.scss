@@ -1,0 +1,29 @@
+// Animatio — composable single-channel atoms. PLAN.md §7
+//
+// This is the layer animate.css structurally cannot have. Each atom animates
+// exactly ONE registered @property channel, so stacking two atoms composes
+// instead of one silently winning:
+//
+//   <div class="an an-fade an-up">          <!-- both apply -->
+//
+// The composed transform is carried by the atom classes themselves, so no
+// `an-compose` marker class is needed on the consumer's element.
+
+@use "sass:list";
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "../lib/mixins" as m;
+@use "manifest" as man;
+
+@if emits("atoms") and wants-compose() {
+  @include l.layer(atoms) {
+    // One grouped rule assembles every channel into a single transform.
+    #{m.compose-selectors(man.$atoms)} {
+      @include m.compose-assembly;
+    }
+
+    @each $name, $entry in man.$atoms {
+      @include m.effect($name, $entry);
+    }
+  }
+}

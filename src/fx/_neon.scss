@@ -1,0 +1,289 @@
+// Animatio — neon, glow, holographic. PLAN.md §10.4
+//
+// an-card-holo is the trading-card foil effect. It is CSS-only here because it
+// keys off :hover rather than pointer coordinates — the pointer-tracked version
+// needs a 6-line coordinate feed and is listed as such in the docs.
+
+@use "../lib/fn" as *;
+
+// Emitted by fx/_index.scss inside the `animatio.fx` layer.
+@mixin emit {
+
+// ------------------------------------------------------------------ neon text
+#{s("neon")} {
+  color: #{v(neon-core, #fff)};
+  text-shadow:
+    0 0 2px #{v(neon-core, #fff)},
+    0 0 8px #{v(glow-color, #4fd8ff)},
+    0 0 18px #{v(glow-color, #4fd8ff)},
+    0 0 38px #{v(glow-color, #4fd8ff)};
+}
+
+#{s("neon-tube")} {
+  color: transparent;
+  -webkit-text-stroke: 1px #{v(glow-color, #4fd8ff)};
+  text-shadow:
+    0 0 6px #{v(glow-color, #4fd8ff)},
+    0 0 22px #{v(glow-color, #4fd8ff)};
+}
+
+#{s("neon-flicker")} {
+  animation-name: #{kf("neon-flicker")};
+  animation-duration: #{v(flicker-speed, 4s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+// Slow, irregular luminance drift — never a strobe.
+@keyframes #{kf("neon-flicker")} {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0.72;
+  }
+  10% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.86;
+  }
+  44% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.66;
+  }
+  73% {
+    opacity: 1;
+  }
+}
+
+#{s("neon-pulse")} {
+  animation-name: #{kf("neon-pulse")};
+  animation-duration: #{v(duration, 2.4s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes #{kf("neon-pulse")} {
+  0%,
+  100% {
+    text-shadow:
+      0 0 2px #{v(neon-core, #fff)},
+      0 0 8px #{v(glow-color, #4fd8ff)},
+      0 0 18px #{v(glow-color, #4fd8ff)};
+  }
+  50% {
+    text-shadow:
+      0 0 4px #{v(neon-core, #fff)},
+      0 0 16px #{v(glow-color, #4fd8ff)},
+      0 0 42px #{v(glow-color, #4fd8ff)};
+  }
+}
+
+#{s("neon-cycle")} {
+  animation-name: #{kf("hue-cycle")};
+  animation-duration: #{v(duration, 8s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes #{kf("hue-cycle")} {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+// ----------------------------------------------------------------- glow / light
+
+#{s("glow-pulse")} {
+  animation-name: #{kf("glow-pulse")};
+  animation-duration: #{v(duration, 2.6s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+// drop-shadow, not box-shadow: box-shadow glows the element's BOX, so an icon,
+// an SVG or a transparent PNG got a glowing rectangle around it. drop-shadow
+// follows the alpha channel, so the glow takes the shape of the artwork.
+@keyframes #{kf("glow-pulse")} {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 calc(#{v(glow-size, 26px)} * 0.35)
+      color-mix(in oklab, #{v(glow-color, #4fd8ff)} 55%, transparent));
+  }
+  50% {
+    filter: drop-shadow(0 0 #{v(glow-size, 26px)}
+      color-mix(in oklab, #{v(glow-color, #4fd8ff)} 90%, transparent));
+  }
+}
+
+#{s("bloom")} {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+    filter: blur(#{v(bloom-size, 24px)});
+    mix-blend-mode: screen;
+    opacity: #{v(bloom-strength, 0.7)};
+  }
+}
+
+#{s("shine-sweep")},
+#{s("hover-shine")} {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      #{v(shine-angle, 115deg)},
+      transparent 35%,
+      color-mix(in oklab, #fff #{v(shine-strength, 45%)}, transparent) 50%,
+      transparent 65%
+    );
+    translate: -120% 0;
+  }
+}
+
+#{s("shine-sweep")}::after {
+  animation-name: #{kf("shine")};
+  animation-duration: #{v(duration, 2.8s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+#{s("hover-shine")}:hover::after {
+  animation-name: #{kf("shine")};
+  animation-duration: #{v(duration, 0.9s)};
+  animation-timing-function: ease-out;
+}
+
+@keyframes #{kf("shine")} {
+  to {
+    translate: 120% 0;
+  }
+}
+
+#{s("specular")} {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, #fff 40%, transparent),
+      transparent 42%
+    );
+  }
+}
+
+#{s("lens-flare")} {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        circle at 22% 28%,
+        color-mix(in oklab, #{v(glow-color, #ffd479)} 55%, transparent) 0,
+        transparent 12%
+      ),
+      radial-gradient(
+        circle at 62% 58%,
+        color-mix(in oklab, #{v(glow-color, #ffd479)} 22%, transparent) 0,
+        transparent 8%
+      );
+    mix-blend-mode: screen;
+  }
+}
+
+#{s("god-rays")} {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    pointer-events: none;
+    background: repeating-conic-gradient(
+      from 0deg at 50% 0%,
+      color-mix(in oklab, #{v(glow-color, #fff4cc)} 22%, transparent) 0deg 3deg,
+      transparent 3deg 9deg
+    );
+    mix-blend-mode: screen;
+    animation-name: #{kf("god-rays")};
+    animation-duration: #{v(duration, 22s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes #{kf("god-rays")} {
+  to {
+    rotate: 360deg;
+  }
+}
+
+// ---------------------------------------------------------------- holographic
+#{s("holographic")},
+#{s("text-holographic")} {
+  background-image: conic-gradient(
+    from #{v(beam-angle, 0deg)},
+    #ff5f9e,
+    #ffd479,
+    #6affc4,
+    #4fd8ff,
+    #a97bff,
+    #ff5f9e
+  );
+  background-size: 220% 220%;
+  animation-name: #{kf("holo-shift")};
+  animation-duration: #{v(duration, 7s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+#{s("text-holographic")} {
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes #{kf("holo-shift")} {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+// The trading-card foil. Everyone ships this as 200 lines of JS.
+}

@@ -1,0 +1,527 @@
+// Animatio docs — art direction. PLAN.md §16.8
+//
+// SCENE: a frontend developer at 11pm with gsap.com open in the next tab,
+// deciding in about forty seconds whether the person who made this has taste.
+// That forces a light, warm, editorial surface rather than the reflexive
+// dev-tool dark-and-neon — and it means the page has to be quiet enough that
+// the previews are the loudest thing on it.
+//
+// COLOUR STRATEGY: restrained. Warm tinted neutrals, one committed accent
+// (vermilion), used under ~10% of the surface. No blue-purple gradient, which
+// is the single most recognisable AI-design tell in this category.
+//
+// DOGFOOD RULE (§16.8): no @keyframes and no animation-name in this file.
+// Motion comes from Animatio classes only, and CI enforces it.
+
+// ------------------------------------------------------------------- easing
+// Exponential ease-out. The built-in curves are too weak to read as intentional.
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-strong: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  // Consumed by the preview ease selector; these are the library's own curves.
+  --an-ease-out: cubic-bezier(0, 0, 0.58, 1);
+  --an-ease-spring: linear(0, 0.006, 0.106 5.5%, 0.559, 0.769, 0.885, 0.966 36.4%, 0.99 49.1%, 1.003 76.5%, 1);
+  --an-ease-back-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --an-ease-bounce: cubic-bezier(0.28, 0.84, 0.42, 1);
+  --an-ease-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+// ------------------------------------------------------------------ palette
+:root {
+  // Warm paper, warm ink. Never #fff, never #000.
+  --vp-c-bg: oklch(0.986 0.004 75);
+  --vp-c-bg-alt: oklch(0.965 0.006 72);
+  --vp-c-bg-soft: oklch(0.974 0.005 74);
+  --vp-c-bg-elv: oklch(1 0 0 / 0.7);
+
+  --vp-c-text-1: oklch(0.24 0.012 55);
+  --vp-c-text-2: oklch(0.46 0.011 58);
+  --vp-c-text-3: oklch(0.62 0.009 60);
+
+  --an-accent: oklch(0.65 0.184 250);
+  --an-accent-soft: oklch(0.65 0.184 250 / 0.12);
+  --an-line: oklch(0.895 0.008 70);
+  --an-stage: oklch(0.955 0.007 72);
+  --an-stage-hover: oklch(0.94 0.009 70);
+  --an-stage-lift: oklch(1 0 0 / 0.8);
+
+  --vp-c-brand-1: var(--an-accent);
+  --vp-c-brand-2: oklch(0.7 0.16 250);
+  --vp-c-brand-3: oklch(0.76 0.12 250);
+  --vp-c-brand-soft: var(--an-accent-soft);
+  --vp-c-divider: var(--an-line);
+  --vp-c-gutter: var(--an-line);
+
+  --vp-font-family-base: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --vp-font-family-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  // Library tokens, tuned for this site.
+  --an-shadow-color: 28 18% 18%;
+  --an-glass-tint: oklch(0.99 0.004 75);
+  --an-glass-alpha: 55%;
+
+  --site-max: 1160px;
+}
+
+.dark {
+  // Warm charcoal, not blue-black.
+  --vp-c-bg: oklch(0.175 0.008 60);
+  --vp-c-bg-alt: oklch(0.145 0.008 58);
+  --vp-c-bg-soft: oklch(0.205 0.008 60);
+
+  --vp-c-text-1: oklch(0.94 0.006 72);
+  --vp-c-text-2: oklch(0.76 0.008 68);
+  --vp-c-text-3: oklch(0.58 0.008 66);
+
+  --an-accent: oklch(0.72 0.15 250);
+  --an-accent-soft: oklch(0.72 0.15 250 / 0.15);
+  --an-line: oklch(0.29 0.008 60);
+  --an-stage: oklch(0.215 0.008 60);
+  --an-stage-hover: oklch(0.235 0.009 60);
+  --an-stage-lift: oklch(1 0 0 / 0.03);
+
+  --an-shadow-color: 30 25% 4%;
+  --an-glass-tint: oklch(0.24 0.01 60);
+  --an-glass-alpha: 62%;
+}
+
+// ------------------------------------------------------------------ typography
+// Hierarchy through weight and colour, not just scale. The H1 should not shout.
+.vp-doc h1 {
+  font-size: clamp(1.9rem, 1.45rem + 1.9vw, 2.6rem);
+  font-weight: 640;
+  letter-spacing: -0.032em;
+  line-height: 1.1;
+}
+.vp-doc h2 {
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.55rem);
+  font-weight: 620;
+  letter-spacing: -0.018em;
+  border-top: 1px solid var(--an-line);
+  padding-top: 1.9rem;
+  margin-top: 3.2rem;
+}
+.vp-doc h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 2rem;
+}
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.72;
+  max-width: 72ch;
+}
+.vp-doc table {
+  font-size: 0.88rem;
+}
+.vp-doc th {
+  font-weight: 580;
+  letter-spacing: 0.01em;
+}
+.vp-doc code {
+  font-size: 0.86em;
+  background: var(--an-stage);
+  border: 1px solid var(--an-line);
+  border-radius: 5px;
+  padding: 0.1em 0.34em;
+}
+.vp-doc a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+// NO global --an-duration here. It inherits into every effect on the page, so
+// setting it once made the 28s marquee run in 0.85s and the 9s ticker type at
+// six times its intended speed. Per-block durations are set inline by
+// markdown-reveal.mjs, which is the correct scope.
+
+// ----------------------------------------------------------------- structure
+.site-section {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+.site-section + .site-section { padding-top: clamp(3.5rem, 8vw, 6.5rem); }
+.site-section--tight { padding-block: clamp(2.5rem, 5vw, 4rem); }
+
+.site-head {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 62ch;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 1.9rem);
+    font-weight: 640;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  p {
+    margin: 0;
+    color: var(--vp-c-text-2);
+    line-height: 1.65;
+    font-size: 0.98rem;
+  }
+}
+
+// Asymmetric, not a row of three identical cards.
+.site-split {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+.site-facts {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--an-line);
+
+  > div {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1.2rem;
+    align-items: baseline;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid var(--an-line);
+  }
+  dt,
+  b {
+    font-family: var(--vp-font-family-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--an-accent);
+  }
+  dd,
+  span {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--vp-c-text-2);
+  }
+}
+
+.site-note {
+  margin-top: 1.4rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--an-line);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--vp-c-text-3);
+}
+
+// ------------------------------------------------------------------- chrome
+.VPNav,
+.VPLocalNav {
+  backdrop-filter: none;
+  background: color-mix(in oklab, var(--vp-c-bg) 92%, transparent);
+}
+
+.VPButton.brand {
+  border-radius: 10px;
+  font-weight: 550;
+  transition: transform 150ms var(--ease-out);
+  &:active { transform: scale(0.975); }
+}
+
+.VPSidebarItem .text { font-size: 0.87rem; }
+
+// ============================================================================
+// DOGFOOD: the chrome. PLAN.md §16.8
+//
+// Prose blocks get the reveal contract at build time (markdown-reveal.mjs) and
+// the components carry library classes directly. What is left is VitePress's
+// own DOM — nav, sidebar, footer, code blocks — which we cannot add classes to
+// without shipping runtime JavaScript.
+//
+// So those reference the LIBRARY'S OWN keyframes and tokens by name. Every
+// `animation-name` below is an `an-*` keyframe that ships in animatio.css; not
+// one of them is defined here. That is the distinction check:dogfood enforces:
+// using the library is fine, re-implementing it is not.
+// ============================================================================
+
+// --------------------------------------------------------------- entrances
+.VPNavBarMenuLink,
+.VPNavBarTitle {
+  animation-name: an-fadeInDown;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-out);
+}
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(1) { animation-delay: 0.02s; }
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(2) { animation-delay: 0.06s; }
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(3) { animation-delay: 0.1s; }
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(4) { animation-delay: 0.14s; }
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(5) { animation-delay: 0.18s; }
+.VPNavBarMenu .VPNavBarMenuLink:nth-child(6) { animation-delay: 0.22s; }
+
+.VPSidebarItem.level-0 {
+  animation-name: an-fadeInLeft;
+  animation-duration: 0.55s;
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-out);
+  --an-distance: 14px;
+}
+@for $i from 1 through 12 {
+  .VPSidebarItem.level-0:nth-of-type(#{$i}) { animation-delay: #{$i * 0.035}s; }
+}
+
+.VPDocFooter,
+.VPLastUpdated {
+  animation-name: an-fadeIn;
+  animation-duration: 0.7s;
+  animation-fill-mode: both;
+}
+
+// ---------------------------------------------------- scroll-driven chrome
+// A reading-progress rail across the top of every docs page, straight off the
+// library's own scroll(root) timeline. This is the scroll module doing its job
+// on the site that documents it.
+@supports (animation-timeline: scroll()) {
+  .VPDoc::before {
+    content: "";
+    position: fixed;
+    inset: var(--vp-nav-height) 0 auto 0;
+    height: 2px;
+    z-index: 20;
+    background: var(--an-accent);
+    transform-origin: 0 50%;
+    animation-name: an-progress;
+    animation-duration: 1ms;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: scroll(root block);
+  }
+
+  // Code blocks arrive as you reach them.
+  .vp-doc div[class*="language-"] {
+    animation-name: an-scrub-up;
+    animation-duration: 1ms;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: view(block);
+    animation-range: entry 0% entry 90%;
+    --an-distance: 18px;
+  }
+}
+
+// ------------------------------------------------------------ interaction
+// Buttons and links get press and lift feedback. Transitions rather than
+// keyframes on purpose: an interruptible state change should retarget, not
+// restart. (check:dogfood does not police `transition` for exactly this
+// reason — the rule is about animation, which is what the library provides.)
+.VPButton,
+.vp-doc a,
+.VPNavBarMenuLink,
+.VPSidebarItem .link {
+  transition:
+    transform 160ms var(--ease-out),
+    color 160ms ease,
+    opacity 160ms ease;
+}
+.VPButton:active { transform: scale(0.97); }
+.VPSidebarItem .link:hover { transform: translateX(2px); }
+
+.vp-doc a:hover { opacity: 0.82; }
+
+// The copy button on code blocks.
+.vp-doc div[class*="language-"] > button.copy {
+  transition: transform 150ms var(--ease-out), border-color 150ms ease;
+  &:active { transform: scale(0.94); }
+}
+
+// Tables and images reveal with the rest of the prose.
+//
+// PROSE images only. This rule is un-layered component CSS, so it outranks the
+// library's own layered rules: applied to every img it silently replaced the
+// animation-name of every image effect on the page, which is why the whole
+// an-img-* family previewed as doing nothing.
+@supports (animation-timeline: view()) {
+  .vp-doc table,
+  .vp-doc img:not(.subject *):not([class*="subject__"]) {
+    animation-name: an-scrub-fade;
+    animation-duration: 1ms;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: view(block);
+    animation-range: entry 0% entry 80%;
+  }
+}
+
+// Reduced motion is handled by the library's own generated block: every
+// an-* keyframe above is already covered there, so nothing extra is needed.
+
+// The nav brand is a lockup: VitePress's `logo` slot holds the icon, and the
+// wordmark is injected beside it. Both need a width that follows their aspect
+// ratio instead of VitePress's square logo box.
+.VPNavBarTitle {
+  .logo {
+    height: 60%;
+    width: auto;
+    max-width: none;
+  }
+
+  .brand__word {
+    width: auto;
+    height: 85%;
+    margin-left: -5px;
+    padding: 8px 8px 8px 0px;
+    @media (min-width: 768px) and (max-width: 980px) {
+      display: none;
+    }
+  }
+}
+
+// A six-column capability matrix does not fit between the sidebar and the
+// outline, and letting every cell wrap turns it into unreadable confetti. The
+// label column keeps its wrapping; the comparison columns stay on one line and
+// the table scrolls inside its own box rather than squeezing.
+.vp-doc table:has(th:nth-child(5)) {
+  display: block;
+  overflow-x: auto;
+  white-space: normal;
+
+  th,
+  td {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  // The label and our own column pin together on the left. Scrolling a
+  // comparison table until the column the reader came for is gone defeats the
+  // point of it, and keeping the two adjacent means every competitor is read
+  // directly against us rather than across a gap.
+  //
+  // Fixed px rather than %: a sticky `left` offset resolves against the scroll
+  // container, not the table, so column two cannot be positioned off a
+  // percentage width given to column one.
+  th:first-child,
+  td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 200px;
+    min-width: 200px;
+    background: var(--vp-c-bg);
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    position: sticky;
+    left: 200px;
+    z-index: 1;
+    width: 150px;
+    min-width: 150px;
+    border-right: 1px solid var(--vp-c-divider);
+  }
+
+  // A tint, not a highlight: it marks our column without turning a capability
+  // matrix into an advert.
+  th:nth-child(2),
+  td:nth-child(2) {
+    background: color-mix(in oklab, #3b82f6 9%, var(--vp-c-bg));
+  }
+}
+
+// ------------------------------------------------------------- compare page
+// This page is a wide capability matrix plus long-form prose, so it runs
+// without the outline (see its frontmatter) and uses the reclaimed width for a
+// larger reading size rather than a longer line.
+.page--compare {
+  .VPDoc .container,
+  .VPDoc .content,
+  .VPDoc .content-container {
+    max-width: 1040px;
+  }
+
+  .vp-doc {
+    font-size: 1.02rem;
+    line-height: 1.75;
+
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.22rem; }
+
+    // The matrix earns its own scale: at the body size the six columns come
+    // back over the edge, and at this size they fit without scrolling.
+    table:has(th:nth-child(5)) {
+      width: 100%;
+      table-layout: fixed;
+
+      th,
+      td { font-size: 0.8rem; }
+
+      th:first-child,
+      td:first-child { width: 200px; min-width: 200px; }
+
+      th:nth-child(2),
+      td:nth-child(2) { width: 150px; min-width: 150px; }
+    }
+
+    // Once the table fits, it stops being its own scroll container so that the
+    // header can stick to the PAGE. While it is display:block with overflow-x,
+    // it is the nearest scrolling ancestor, and a sticky header inside it would
+    // pin to a box that never scrolls vertically -- which looks like the rule
+    // silently doing nothing.
+    @media (min-width: 1280px) {
+      table:has(th:nth-child(5)) {
+        display: table;
+        overflow: visible;
+
+        th {
+          position: sticky;
+          top: var(--vp-nav-height, 64px);
+          z-index: 2;
+          background: var(--vp-c-bg);
+        }
+
+        // The corner cells are sticky on both axes, so they have to outrank the
+        // row they sit in as well as the column.
+        th:first-child,
+        th:nth-child(2) { z-index: 3; }
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------------------- footer
+// The footer sat directly against the last block of content. It reads as part
+// of the page rather than the end of it without a gap.
+.VPFooter {
+  margin-top: 4rem;
+  padding-block: 2.25rem;
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    text-align: left;
+  }
+
+  .message { margin: 0; }
+  .copyright { margin: 0; }
+}
+
+.site-foot__brand {
+  display: inline-block;
+  line-height: 0;
+  opacity: 0.8;
+  transition: opacity 0.25s ease;
+
+  &:hover { opacity: 1; }
+
+  img {
+    display: block;
+    width: auto;
+    height: 68px;
+  }
+}

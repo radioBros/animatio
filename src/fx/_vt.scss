@@ -1,0 +1,64 @@
+// Animatio — page and view transitions. PLAN.md §10.15
+//
+// `@view-transition { navigation: auto }` gives CROSS-DOCUMENT transitions on a
+// plain multi-page site with NO JavaScript at all. Most people assume this needs
+// a router library. It does not.
+//
+// Degradation is unusually clean — an unsupporting browser just navigates
+// normally, and `view-transition-name` is an unknown property that gets dropped
+// at parse time. So unlike the scroll module this needs no @supports guard,
+// only the annotation.
+//
+// ⚠️ GOTCHAS, same class as the glass ones in §9.6:
+//   - view-transition-name FORMS A STACKING CONTEXT, exactly like filter does.
+//     Adding an-vt-morph to a card can change how z-index resolves inside it.
+//   - The view-transition layer paints ABOVE EVERYTHING, including the top
+//     layer — a <dialog> or popover renders UNDER a running transition
+//     regardless of z-index.
+//   - Names must be unique per document. Two elements sharing a name skip the
+//     transition entirely, which is why an-vt-list-item takes --an-vt-name.
+//   Source: https://www.w3.org/TR/css-view-transitions-1/
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  /* @support-status  newly
+   * @feature         @view-transition (cross-document)
+   * @browsers        Chrome 126+, Safari 18.2+; not in Firefox stable
+   * @fallback        instant navigation, exactly as today
+   * @checked         2026-09-04
+   * @source          https://www.w3.org/TR/css-view-transitions-1/
+   */
+  #{s("vt-fade")} {
+    view-transition-name: #{v(vt-name, an-page)};
+  }
+
+  ::view-transition-old(root) {
+    animation-name: #{kf("vt-fade-out")};
+    animation-duration: #{v(vt-duration, 0.28s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  ::view-transition-new(root) {
+    animation-name: #{kf("vt-fade-in")};
+    animation-duration: #{v(vt-duration, 0.34s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes #{kf("vt-fade-out")} {
+    to { opacity: 0; }
+  }
+  @keyframes #{kf("vt-fade-in")} {
+    from { opacity: 0; }
+  }
+
+
+  // Shared-element morph. --an-vt-name MUST be unique per element; the docs
+  // show deriving it from a record id.
+  #{s("vt-morph")} {
+    view-transition-name: #{v(vt-name, an-shared)};
+    contain: layout;
+  }
+
+}

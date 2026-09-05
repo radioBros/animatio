@@ -1,0 +1,69 @@
+// Animatio — 3D and depth. PLAN.md §10.13
+//
+// an-3d is the perspective PARENT. The flip/hinge families need it, and the
+// docs lead with that because a missing perspective is the #1 reason a 3D
+// effect looks flat.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  #{s("3d")} {
+    perspective: #{v(perspective, 1200px)};
+    perspective-origin: 50% 50%;
+  }
+
+  // ------------------------------------------------------------- flip card (◑)
+  // Markup: .an-flip-card > .an-face:first-child (front) + .an-face (back)
+  #{s("flip-card")} {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform #{v(duration, 0.7s)} cubic-bezier(0.65, 0, 0.35, 1);
+
+    > #{s("face")} {
+      backface-visibility: hidden;
+    }
+    > #{s("face")}:last-child {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+    }
+    &:hover,
+    &:focus-within {
+      transform: rotateY(180deg);
+    }
+  }
+  #{s("flip-card-x")} {
+    > #{s("face")}:last-child {
+      transform: rotateX(180deg);
+    }
+    &:hover,
+    &:focus-within {
+      transform: rotateX(180deg);
+    }
+  }
+
+
+
+
+  // translateZ under a perspective is mathematically a uniform SCALE -- the
+  // element gets bigger and nothing else changes, which is not what anyone
+  // means by a perspective hover. The tilt is what makes it read as depth.
+
+  #{s("depth-stack")} {
+    position: relative;
+    transform-style: preserve-3d;
+    > * {
+      transform: translateZ(calc(var(--an-i, 0) * #{v(depth-step, 18px)}));
+    }
+  }
+
+  #{s("layered-parallax")} {
+    transform-style: preserve-3d;
+    > * {
+      transform: translateZ(calc(var(--an-i, 0) * -40px))
+        scale(calc(1 + var(--an-i, 0) * 0.06));
+    }
+  }
+
+
+}

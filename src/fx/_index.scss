@@ -1,0 +1,49 @@
+// Animatio — the cool-effect catalogue. PLAN.md §10
+//
+// Feasibility badges live in the manifest and render on the docs pages:
+//   ●  pure CSS      ◐  needs the SVG sprite      ◑  needs extra markup
+//   ○  needs JS — never counted as a library feature
+//
+// Each partial exposes a single `emit` mixin rather than emitting at import
+// time: @use cannot be nested, so the layer wrapper and the emits() guard live
+// here, in one place.
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "gooey";
+@use "distortion";
+@use "glitch";
+@use "neon";
+@use "backgrounds";
+@use "text";
+@use "hover";
+@use "media";
+@use "loaders";
+@use "borders";
+@use "reveal";
+@use "depth";
+@use "ambient";
+@use "vt";
+
+@if emits("fx") {
+  @include l.layer(fx) {
+    @include gooey.emit;
+    @include distortion.emit;
+    @include glitch.emit;
+    @include neon.emit;
+    @include backgrounds.emit;
+    @include text.emit;
+    @include hover.emit;
+    @include media.emit;
+    @include loaders.emit;
+    @include borders.emit;
+    @include reveal.emit;
+    @include depth.emit;
+    @include ambient.emit;
+  }
+  // View transitions get their own layer: ::view-transition pseudo-elements are
+  // document-level, not scoped to the fx cascade.
+  @include l.layer(vt) {
+    @include vt.emit;
+  }
+}

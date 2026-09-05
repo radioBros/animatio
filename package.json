@@ -1,0 +1,109 @@
+{
+  "name": "@radiobros/animatio",
+  "version": "1.0.0",
+  "description": "CSS-only animation + effects library. animate.css parity, composable transform engine, scroll-driven reveals, glass/backdrop surfaces, and a tree-shaking engine.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "css",
+    "scss",
+    "animation",
+    "animate.css",
+    "scroll-driven-animations",
+    "glassmorphism",
+    "view-transitions",
+    "tree-shaking"
+  ],
+  "files": [
+    "dist",
+    "src",
+    "engine",
+    "bin",
+    "assets/animatio-filters.svg",
+    "optional",
+    "LICENSE",
+    "NOTICES",
+    "README.md",
+    "CHANGELOG.md",
+    "!dist/test",
+    "!test",
+    "assets/icon.png",
+    "assets/text-small.png"
+  ],
+  "bin": {
+    "animatio": "bin/animatio.mjs"
+  },
+  "exports": {
+    ".": {
+      "sass": "./src/_index.scss",
+      "style": "./dist/animatio.css",
+      "default": "./dist/animatio.css"
+    },
+    "./compose": "./dist/animatio.compose.css",
+    "./full": "./dist/animatio.css",
+    "./nolayer": "./dist/animatio.nolayer.css",
+    "./compat": "./dist/animatio.compat.css",
+    "./catalogue": "./dist/catalogue.json",
+    "./filters.svg": "./assets/animatio-filters.svg",
+    "./once.js": "./optional/animatio-once.js",
+    "./vite": "./engine/plugin/vite.mjs",
+    "./webpack": "./engine/plugin/webpack.mjs",
+    "./rollup": "./engine/plugin/rollup.mjs",
+    "./esbuild": "./engine/plugin/esbuild.mjs",
+    "./postcss": "./engine/plugin/postcss.mjs",
+    "./engine": "./engine/index.mjs",
+    "./src/*": "./src/*",
+    "./fast": "./dist/animatio.fast.css",
+    "./min": "./dist/animatio.min.css"
+  },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "workspaces": [
+    "docs"
+  ],
+  "scripts": {
+    "gen:manifest": "node tools/gen-manifest.mjs",
+    "import:animate": "node tools/import-animate-css.mjs",
+    "build": "node tools/build.mjs",
+    "build:catalogue": "node tools/build-catalogue.mjs",
+    "size": "node tools/size-budget.mjs",
+    "check": "node tools/check.mjs",
+    "test": "node --test test/*.test.mjs",
+    "verify": "npm run gen:manifest && npm run build && npm run build:catalogue && npm run shake:fixtures && npm run check && npm run size && npm test",
+    "docs:dev": "npm run build && npm run build:catalogue && npm run docs:icons && npm -w docs run dev",
+    "docs:build": "npm run build && npm run build:catalogue && npm run docs:icons && npm -w docs run build",
+    "shake:fixtures": "node bin/animatio.mjs build --content \"test/treeshake/marketing/*.html\" -o test/treeshake/marketing/out.css",
+    "docs:icons": "node tools/fetch-icons.mjs",
+    "docs:verify": "node tools/docs-verify.mjs",
+    "docs:filters": "node tools/gen-filters.mjs",
+    "audit:previews": "node tools/probe-page.mjs && node tools/audit-previewable.mjs",
+    "build:watch": "node tools/watch.mjs",
+    "prepack": "npm run gen:manifest && npm run build && npm run build:catalogue",
+    "prepublishOnly": "npm run verify",
+    "pack:dry": "npm pack --dry-run",
+    "release": "node tools/release.mjs",
+    "release:dry": "node tools/release.mjs --dry-run"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.1.1",
+    "postcss": "^8.5.6",
+    "sass": "^1.93.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radioBros/animatio.git"
+  },
+  "homepage": "https://github.com/radioBros/animatio#readme",
+  "bugs": {
+    "url": "https://github.com/radioBros/animatio/issues"
+  }
+}

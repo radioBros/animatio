@@ -1,0 +1,140 @@
+// Animatio — images, media and cards. PLAN.md §10.8, §10.9
+//
+// an-img-compare is CSS-only via `resize: horizontal` on an overflow:hidden
+// overlay — real, but the handle is the browser's corner grip, not a centred
+// vertical bar, and it drags from one corner only. The docs say exactly that
+// rather than letting people discover it.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  // ------------------------------------------------------------------- images
+  #{s("img-zoom")} {
+    overflow: hidden;
+    > img,
+    > picture > img {
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    &:hover > img,
+    &:hover > picture > img {
+      transform: scale(#{v(zoom, 1.08)});
+    }
+  }
+
+
+  #{s("img-grain")},
+  {
+    position: relative;
+  }
+
+  // The blur clears when the image reports itself loaded. `:has(> img[...])`
+  // cannot express "this image finished decoding", so the consumer flips the
+  // attribute -- but the preview needs a way to show the transition, which is
+  // what the class hook is for.
+  #{s("img-blur-load")} {
+    filter: blur(#{v(blur-from, 16px)});
+    transition: filter #{v(duration, 0.6s)} ease;
+
+    &[data-loaded],
+    &.is-loaded {
+      filter: blur(0);
+    }
+  }
+
+
+  #{s("img-reveal")} {
+    animation-name: #{kf("clip-reveal-up")};
+    animation-duration: #{v(duration, 1s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+
+  #{s("img-parallax")} {
+    will-change: transform;
+  }
+
+  // ◑ Markup: .an-img-compare > .an-compare-top (resizable) + base image.
+  #{s("img-compare")} {
+    position: relative;
+    overflow: hidden;
+
+    > #{s("compare-top")} {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 50%;
+      max-width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      resize: horizontal;
+      // The grip is the browser's own corner handle — see the note above.
+      border-right: 2px solid #{v(compare-handle, #fff)};
+    }
+  }
+
+  #{s("video-overlay")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        hsl(#{v(shadow-color, 220 15% 10%)} / 0.72),
+        transparent 55%
+      );
+    }
+  }
+
+
+  // -------------------------------------------------------------------- cards
+  #{s("card-lift")} {
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.3s ease;
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px -20px hsl(#{v(shadow-color, 220 15% 10%)} / 0.4);
+    }
+  }
+
+  #{s("card-stack")} {
+    position: relative;
+    > * {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translateY(calc(var(--an-i, 0) * 6px))
+        scale(calc(1 - var(--an-i, 0) * 0.03));
+    }
+    &:hover > * {
+      transform: translateY(calc(var(--an-i, 0) * 16px)) scale(1);
+    }
+  }
+
+  #{s("card-fan")} {
+    position: relative;
+    > * {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: 50% 120%;
+    }
+    &:hover > * {
+      transform: rotate(calc((var(--an-i, 0) - 1) * #{v(fan-angle, 7deg)}));
+    }
+  }
+
+  #{s("card-peek")} {
+    overflow: hidden;
+    > #{s("peek")} {
+      transform: translateY(100%);
+      opacity: 0;
+      transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease;
+    }
+    &:hover > #{s("peek")},
+    &:focus-within > #{s("peek")} {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}

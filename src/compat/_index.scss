@@ -1,0 +1,76 @@
+// Animatio — animate.css drop-in compatibility. PLAN.md §6.2
+//
+// Swap one <link> and an existing animate.css project keeps working. This is
+// the cheapest possible migration and the main adoption lever, so it is a real
+// module rather than a docs note.
+//
+//   @use "animatio" with ($emit-compat: true);
+//   — or —  <link href="animatio.compat.css">
+
+@use "sass:map";
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "../effects/manifest" as man;
+
+@if emits("compat") {
+  @include l.layer(effects) {
+    // animate.css's own tokens, mapped onto ours. A project that already sets
+    // --animate-duration keeps working untouched.
+    :root {
+      --animate-duration: #{v(duration, 1s)};
+      --animate-delay: #{v(delay, 0s)};
+      --animate-repeat: #{v(iterations, 1)};
+    }
+
+    .animate__animated {
+      animation-duration: var(--animate-duration, 1s);
+      animation-delay: var(--animate-delay, 0s);
+      animation-timing-function: #{v(ease, ease)};
+      animation-iteration-count: var(--animate-repeat, 1);
+      animation-fill-mode: both;
+      animation-play-state: #{v(play, running)};
+    }
+
+    // Every parity class, aliased. Generated from the same manifest, so the
+    // alias list can never drift from the real one.
+    @each $name, $entry in man.$parity {
+      .animate__#{$name} {
+        animation-name: #{kf($name)};
+
+        $rule: map.get($entry, rule);
+        @if $rule {
+          @each $property, $value in $rule {
+            #{$property}: #{$value};
+          }
+        }
+      }
+    }
+
+    // animate.css utility classes.
+    .animate__animated.animate__infinite {
+      animation-iteration-count: infinite;
+    }
+    @for $i from 1 through 3 {
+      .animate__animated.animate__repeat-#{$i} {
+        animation-iteration-count: calc(var(--animate-repeat, 1) * #{$i});
+      }
+    }
+    @for $i from 1 through 5 {
+      .animate__animated.animate__delay-#{$i}s {
+        animation-delay: calc(var(--animate-delay, 1s) * #{$i});
+      }
+    }
+    .animate__animated.animate__slow {
+      animation-duration: calc(var(--animate-duration, 1s) * 2);
+    }
+    .animate__animated.animate__slower {
+      animation-duration: calc(var(--animate-duration, 1s) * 3);
+    }
+    .animate__animated.animate__fast {
+      animation-duration: calc(var(--animate-duration, 1s) * 0.8);
+    }
+    .animate__animated.animate__faster {
+      animation-duration: calc(var(--animate-duration, 1s) * 0.5);
+    }
+  }
+}

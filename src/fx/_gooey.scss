@@ -1,0 +1,146 @@
+// Animatio — gooey, liquid, blob. PLAN.md §10.1
+//
+// The gooey merge is feGaussianBlur feeding an feColorMatrix that crushes the
+// alpha ramp into a hard edge, so overlapping blurred shapes FUSE instead of
+// just overlapping. The filter itself lives in assets/animatio-filters.svg and
+// must be pasted into the page once — hence the an-svg-* namespace (§9.5).
+//
+// The blob family needs no SVG at all: an 8-value border-radius animated
+// directly is enough for organic morphing.
+
+@use "../lib/fn" as *;
+
+// Emitted by fx/_index.scss inside the `animatio.fx` layer.
+@mixin emit {
+
+// ---------------------------------------------------------------- gooey (SVG)
+#{s("svg-goo")} {
+  filter: url("#an-goo");
+}
+
+
+
+
+
+
+
+
+
+
+// ------------------------------------------------------------ blob (pure CSS)
+#{s("blob")} {
+  border-radius: #{v(blob-shape, 62% 38% 46% 54% / 55% 47% 53% 45%)};
+}
+
+#{s("blob-morph")} {
+  border-radius: 62% 38% 46% 54% / 55% 47% 53% 45%;
+  animation-name: #{kf("blob-morph")};
+  animation-duration: #{v(blob-speed, 12s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes #{kf("blob-morph")} {
+  0%,
+  100% {
+    border-radius: 62% 38% 46% 54% / 55% 47% 53% 45%;
+  }
+  25% {
+    border-radius: 40% 60% 62% 38% / 42% 62% 38% 58%;
+  }
+  50% {
+    border-radius: 54% 46% 38% 62% / 63% 40% 60% 37%;
+  }
+  75% {
+    border-radius: 45% 55% 57% 43% / 38% 58% 42% 62%;
+  }
+}
+
+#{s("blob-drift")} {
+  border-radius: 62% 38% 46% 54% / 55% 47% 53% 45%;
+  animation-name: #{kf("blob-morph")}, #{kf("blob-drift")};
+  animation-duration: #{v(blob-speed, 12s)}, calc(#{v(blob-speed, 12s)} * 1.7);
+  animation-iteration-count: infinite, infinite;
+  animation-timing-function: ease-in-out, ease-in-out;
+}
+
+@keyframes #{kf("blob-drift")} {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  33% {
+    translate: #{v(drift-x, 14%)} calc(#{v(drift-y, 12%)} * -1);
+  }
+  66% {
+    translate: calc(#{v(drift-x, 14%)} * -1) #{v(drift-y, 12%)};
+  }
+}
+
+// ------------------------------------------------------------------- liquid
+#{s("liquid-fill")} {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  // Wider than the box and rocking, so the surface reads as liquid rather than
+  // as a rectangle with a rounded top. z-index 0, not -1: at -1 it sat behind
+  // the host's own background and was invisible on any filled surface.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: auto -30% 0 -30%;
+    height: 0;
+    z-index: 0;
+    background: #{v(liquid-color, currentColor)};
+    border-radius: 44% 56% 0 0 / 20% 24% 0 0;
+    transition: height #{v(duration, 0.55s)} cubic-bezier(0.65, 0, 0.35, 1);
+    animation-name: #{kf("liquid-rock")};
+    animation-duration: #{v(rock-duration, 3s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  // Content stays above the rising liquid.
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    height: 130%;
+  }
+}
+
+@keyframes #{kf("liquid-rock")} {
+  0%, 100% { transform: translateX(-3%) rotate(-1.2deg); }
+  50% { transform: translateX(3%) rotate(1.2deg); }
+}
+
+// Not currentColor: this element sets `color: transparent` for
+// background-clip, so currentColor would resolve to transparent and the upper
+// half of the fill would vanish. See --an-ink in _tokens.scss.
+#{s("liquid-text")} {
+  background-image: linear-gradient(
+    to top,
+    #{v(liquid-color, #4f9dff)} 50%,
+    #{v(ink, CanvasText)} 50%
+  );
+  background-size: 100% 200%;
+  background-position: 0 0;
+  background-clip: text;
+  color: transparent;
+  transition: background-position 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+
+  &:hover {
+    background-position: 0 100%;
+  }
+}
+
+
+
+
+
+
+}

@@ -1,0 +1,123 @@
+// Animatio — glass, backdrop, noise, shadow. PLAN.md §9
+//
+// THE CONSTRAINT THAT SHAPES THIS MODULE:
+// `backdrop-filter: url(#svgFilter)` does not work. WebKit parses it and renders
+// nothing (bugs.webkit.org #245510); Chromium handles only some cases. So
+// "liquid glass in one declaration" is off the table and this is three layers:
+//   an-glass         universal, ships everywhere
+//   an-glass-noise   portable feTurbulence, as a data-URI background-image
+//   an-glass-refract layered displacement, EXPLICIT OPT-IN (see §9.4)
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+
+// feTurbulence rendered to an image, NOT referenced as a filter — that is what
+// makes grain work in every browser where the filter route does not.
+@function noise-uri($freq, $octaves: 4) {
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='#{$freq}' numOctaves='#{$octaves}' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@if emits("surfaces") {
+  @include l.layer(surfaces) {
+    // =====================================================================
+    // an-glass
+    // =====================================================================
+    #{s("glass")} {
+      position: relative;
+      background: color-mix(
+        in oklab,
+        #{v(glass-tint, #fff)} #{v(glass-alpha, 2%)},
+        transparent
+      );
+      backdrop-filter: blur(#{v(glass-blur, 6px)}) saturate(#{v(glass-sat, 1.3)});
+      border: 1px solid color-mix(in oklab, #{v(glass-tint, #fff)} 8%, transparent);
+      border-radius: #{v(glass-radius, 1rem)};
+      // Ambient + direct, plus a specular top edge and a seated bottom edge.
+      // Every var() carries its fallback inline: a bare var() with the token
+      // unset would invalidate the WHOLE box-shadow, losing all four layers.
+      box-shadow:
+        inset 0 1px 0 0 color-mix(in oklab, #fff 45%, transparent),
+        inset 0 -1px 0 0 color-mix(in oklab, #000 12%, transparent),
+        0 1px 2px -1px hsl(#{v(shadow-color, 220 15% 10%)} / 0.18),
+        0 8px 24px -6px hsl(#{v(shadow-color, 220 15% 10%)} / 0.22);
+    }
+
+    // No backdrop-filter at all -> a solid tint rather than an unreadable panel.
+    @supports not (
+      (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+    ) {
+      #{s("glass")} {
+        background: color-mix(in oklab, #{v(glass-tint, #fff)} 55%, transparent);
+      }
+    }
+
+    // ------------------------------------------------------------ real glass
+    // The one that actually refracts what is behind it, rather than only
+    // blurring it: feTurbulence type="fractalNoise" generates the distortion
+    // field and feDisplacementMap pushes SourceGraphic along it. The filter
+    // lives in assets/animatio-filters.svg, which has to be inlined once.
+    //
+    // HONEST SUPPORT NOTE: backdrop-filter: url() renders nothing in WebKit
+    // (bug 245510) and only some cases in Chromium, and @supports cannot tell
+    // you which -- it tests whether the declaration PARSES, so it returns true
+    // in Safari and switches the broken path on. So this is opt-in behind an
+    // attribute you set after your own render probe, and without it the class
+    // is plain an-glass: good-looking, just not refractive.
+    #{s("glass-real")} {
+      @extend #{s("glass")};
+    }
+    [data-#{p()}-refract="on"] #{s("glass-real")} {
+      backdrop-filter: blur(#{v(glass-blur, 10px)})
+        saturate(#{v(glass-sat, 1.6)})
+        url("#an-glass-real");
+    }
+
+    #{s("glass-dark")} {
+      #{prop(glass-tint)}: #0b1220;
+      #{prop(glass-alpha)}: 38%;
+      color-scheme: dark;
+    }
+    #{s("glass-frost")} {
+      #{prop(glass-alpha)}: 28%;
+      #{prop(glass-sat)}: 1.2;
+    }
+    // Nested glass double-blurs; this opts out of the backdrop entirely.
+
+    // =====================================================================
+    // an-glass-noise / an-bg-noise — the portable feTurbulence
+    // =====================================================================
+    #{s("noise")}::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: noise-uri(0.8);
+      opacity: #{v(noise-opacity, 0.06)};
+      mix-blend-mode: #{v(noise-blend, overlay)};
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    // =====================================================================
+    // an-svg-glass-refract — layered displacement. OPT-IN ONLY.
+    //
+    // Named an-svg-* because it needs the sprite (§9.5), and that promise is
+    // enforced by check:svg-naming rather than merely stated.
+    //
+    // There is no @supports that can gate this: @supports tests whether a
+    // declaration PARSES, not whether it RENDERS. WebKit parses
+    // `backdrop-filter: url(...)` and does nothing with it, so the obvious
+    // guard returns true in Safari and switches the broken path ON. It looks
+    // safe and is actively harmful. Hence an explicit attribute the consumer
+    // sets after their own render probe.
+    // =====================================================================
+
+    /* @support-status  broken
+     * @feature         backdrop-filter: url(#svg)
+     * @browsers        Chromium partially; WebKit parses and renders nothing
+     * @fallback        plain an-glass — visually good, just not refractive
+     * @checked         2026-09-04
+     * @source          https://bugs.webkit.org/show_bug.cgi?id=245510
+     */
+
+  }
+}

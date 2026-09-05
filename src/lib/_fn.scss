@@ -1,0 +1,78 @@
+// Animatio — naming helpers.
+// PLAN.md §3.2: nothing in the codebase writes `an-` or `--an-` literally.
+
+@use "sass:string";
+@use "sass:list";
+@use "sass:map";
+@use "../config";
+
+/// The bare engine class name, e.g. "an".
+@function p() {
+  @return config.$prefix;
+}
+
+/// A prefixed class name: c("fadeInUp") -> "an-fadeInUp"
+@function c($name) {
+  @return "#{config.$prefix}-#{$name}";
+}
+
+/// A prefixed selector: s("fadeInUp") -> ".an-fadeInUp"
+@function s($name) {
+  @return ".#{c($name)}";
+}
+
+/// A prefixed custom property NAME: prop("duration") -> "--an-duration"
+@function prop($name) {
+  @return "--#{config.$prefix}-#{$name}";
+}
+
+/// A var() reference with fallback: v("duration", 1s) -> var(--an-duration, 1s)
+/// PLAN.md §2.3 — every value reads from a token with a fallback.
+///
+/// Variadic, so a comma-separated fallback (a font stack, a shorthand list)
+/// passes through intact: v(mono, ui-monospace, Menlo, monospace).
+@function v($name, $fallback...) {
+  @if list.length($fallback) == 0 {
+    @return var(#{prop($name)});
+  }
+  $joined: "";
+  @for $i from 1 through list.length($fallback) {
+    @if $i == 1 {
+      $joined: "#{list.nth($fallback, $i)}";
+    } @else {
+      $joined: "#{$joined}, #{list.nth($fallback, $i)}";
+    }
+  }
+  @return var(#{prop($name)}, #{$joined});
+}
+
+/// A prefixed @keyframes name: kf("fadeInUp") -> "an-fadeInUp"
+@function kf($name) {
+  @return "#{config.$prefix}-#{$name}";
+}
+
+/// Is this module being emitted?
+@function emits($module) {
+  $map: (
+    "base": config.$emit-base,
+    "parity": config.$emit-parity,
+    "atoms": config.$emit-atoms,
+    "props": config.$emit-props,
+    "scroll": config.$emit-scroll,
+    "surfaces": config.$emit-surfaces,
+    "fx": config.$emit-fx,
+    "util": config.$emit-util,
+    "compat": config.$emit-compat,
+  );
+  @return map.get($map, $module) == true;
+}
+
+/// Does the current $mode emit `fast` keyframes?
+@function wants-fast() {
+  @return config.$mode == "fast" or config.$mode == "full";
+}
+
+/// Does the current $mode emit `compose` keyframes?
+@function wants-compose() {
+  @return config.$mode == "compose" or config.$mode == "full";
+}

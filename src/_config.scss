@@ -1,0 +1,41 @@
+// Animatio — configuration
+// Every value here is `!default`, so consumers override with:
+//   @use "animatio" with ($prefix: "fx", $emit-fx: false);
+
+// ---------------------------------------------------------------- namespacing
+$prefix: "an" !default;
+
+// ------------------------------------------------------------------- emission
+// Coarse, zero-tooling tree-shaking. The fine-grained engine is `animatio/vite`
+// and the `animatio` CLI — see PLAN.md §14.2.
+$emit-base: true !default;
+$emit-parity: true !default;
+$emit-atoms: true !default;
+$emit-props: true !default;
+$emit-scroll: true !default;
+$emit-surfaces: true !default;
+$emit-fx: true !default;
+$emit-util: true !default;
+$emit-compat: false !default;
+
+// ----------------------------------------------------------------------- mode
+// "fast"    — keyframes write transform/opacity directly (compositor friendly)
+// "compose" — keyframes write @property channels (stackable, main thread)
+// "full"    — parity presets fast, atoms compose
+$mode: "full" !default;
+
+// --------------------------------------------------------------------- layers
+$use-layers: true !default;
+
+// -------------------------------------------------------------------- scaling
+$stagger-max: 24 !default;
+
+// ------------------------------------------------------------- token defaults
+$duration: 1s !default;
+$delay: 0s !default;
+$ease: ease !default;
+$distance: 100% !default;
+$distance-big: 2000px !default;
+$perspective: 1200px !default;
+$stagger: 80ms !default;
+$origin: 50% 50% !default;

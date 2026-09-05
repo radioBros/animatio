@@ -1,0 +1,314 @@
+// Animatio — hover, press, cursor. PLAN.md §10.7
+//
+// an-hover-tilt-grid and an-magnetic-zones are the genuinely CSS-only answer to
+// pointer tracking: a grid of invisible hover zones gives DIRECTIONAL response
+// with no JS at all. They need the zone markup (◑), and the docs ship it.
+//
+// True cursor-following (an-cursor-spotlight, an-magnetic) needs live pointer
+// coordinates and is impossible in CSS. Those ship as a 6-line coordinate feed
+// that sets --an-mx / --an-my; the EFFECT still lives here.
+
+@use "sass:list";
+@use "../lib/fn" as *;
+
+@mixin emit {
+  #{s("hover-lift")} {
+    transition:
+      transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.28s ease;
+    &:hover,
+    &:focus-visible {
+      transform: translateY(#{v(lift, -4px)});
+      box-shadow: 0 16px 34px -14px hsl(#{v(shadow-color, 220 15% 10%)} / 0.35);
+    }
+  }
+
+  #{s("hover-sink")} {
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: translateY(2px);
+    }
+  }
+
+  #{s("hover-zoom")} {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    &:hover {
+      transform: scale(#{v(zoom, 1.05)});
+    }
+  }
+
+  // 5deg/7deg is barely a tilt. Enough to see, still short of a novelty.
+  #{s("hover-tilt")} {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    &:hover {
+      transform: perspective(#{v(perspective, 900px)})
+        rotateX(#{v(tilt-x, 10deg)}) rotateY(#{v(tilt-y, -14deg)});
+    }
+  }
+
+  #{s("hover-fill")} {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #{v(fill-color, currentColor)};
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      transition: transform 0.34s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    &:hover::before,
+    &:focus-visible::before {
+      transform: scaleX(1);
+    }
+  }
+
+  #{s("hover-border-slide")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 2px;
+      background: #{v(underline-color, currentColor)};
+      transform: translateX(-101%);
+      transition: transform 0.34s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    &:hover::after {
+      transform: translateX(0);
+    }
+  }
+
+  #{s("hover-arrow")} {
+    > #{s("arrow")},
+    > svg {
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    &:hover > #{s("arrow")},
+    &:hover > svg {
+      transform: translateX(4px);
+    }
+  }
+
+  #{s("hover-swap")} {
+    position: relative;
+    display: inline-grid;
+    overflow: hidden;
+    > * {
+      grid-area: 1 / 1;
+      transition:
+        transform 0.28s cubic-bezier(0.65, 0, 0.35, 1),
+        opacity 0.2s ease;
+    }
+    > *:last-child {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    &:hover > *:first-child,
+    &:focus-within > *:first-child {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    &:hover > *:last-child,
+    &:focus-within > *:last-child {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  #{s("hover-icon-morph")} {
+    > svg path {
+      transition: d 0.3s ease, transform 0.3s ease;
+    }
+    &:hover > svg {
+      transform: rotate(90deg);
+    }
+  }
+
+  // :has() group effects — no JS, no wrapper class on every sibling.
+  #{s("hover-group")}:has(> *:hover) > *:not(:hover) {
+    opacity: #{v(dim, 0.45)};
+    transition: opacity 0.28s ease;
+  }
+  #{s("hover-blur-siblings")}:has(> *:hover) > *:not(:hover) {
+    filter: blur(2px);
+    transition: filter 0.28s ease;
+  }
+  #{s("hover-dim-siblings")}:has(> *:hover) > *:not(:hover) {
+    opacity: 0.4;
+    transition: opacity 0.28s ease;
+  }
+
+  // ------------------------------------------------------------------- press
+  #{s("press")} {
+    transition: transform 0.12s ease;
+    &:active {
+      transform: translateY(1px) scale(0.985);
+    }
+  }
+  #{s("press-squish")} {
+    transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+    &:active {
+      transform: scale(0.92, 1.04);
+    }
+  }
+  // The riser is the side of the key, so it takes the element's own colour
+  // darkened -- mixing toward #000 made it read as a black line drawn under a
+  // flat box. Pressing tips the top face away as well as dropping it, which is
+  // the part that makes it look three-dimensional rather than merely lower.
+
+  #{s("ripple")} {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 10px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: color-mix(in oklab, currentColor 30%, transparent);
+      opacity: 0;
+      transform: scale(1);
+    }
+    &:active::after {
+      animation-name: #{kf("ripple")};
+      animation-duration: 0.55s;
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+  @keyframes #{kf("ripple")} {
+    from {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(36);
+    }
+  }
+
+  // ------------------------------------------------------------- feedback pops
+  #{s("shake-error")} {
+    animation-name: #{kf("shake-error")};
+    animation-duration: 0.45s;
+    animation-timing-function: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+  @keyframes #{kf("shake-error")} {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-7px); }
+    40%, 60% { transform: translateX(7px); }
+  }
+
+  #{s("pop-like")} {
+    transition: transform 0.22s cubic-bezier(0.34, 1.8, 0.64, 1);
+    &:active {
+      transform: scale(1.3);
+    }
+  }
+
+
+
+  #{s("expand-label")} {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    > #{s("label")} {
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      transition: max-width 0.32s ease, opacity 0.24s ease, margin 0.32s ease;
+    }
+    &:hover > #{s("label")},
+    &:focus-within > #{s("label")} {
+      max-width: #{v(label-width, 12rem)};
+      opacity: 1;
+      margin-inline-start: 0.4rem;
+    }
+  }
+
+  // ---------------------------------------- CSS-only directional hover (◑)
+  // A 3x3 grid of invisible zones over the element. Which zone is hovered
+  // decides which way it tilts — the closest thing to pointer tracking that
+  // exists without JS, and worth shipping because everyone assumes it is
+  // impossible. Markup: nine <i> children inside .an-hover-tilt-grid.
+  #{s("hover-tilt-grid")} {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    > #{s("zone")} {
+      position: absolute;
+      width: 33.34%;
+      height: 33.34%;
+      z-index: 2;
+    }
+    > #{s("zone")}:nth-child(-n + 3) { top: 0; }
+    > #{s("zone")}:nth-child(n + 4):nth-child(-n + 6) { top: 33.33%; }
+    > #{s("zone")}:nth-child(n + 7) { top: 66.66%; }
+    > #{s("zone")}:nth-child(3n + 1) { left: 0; }
+    > #{s("zone")}:nth-child(3n + 2) { left: 33.33%; }
+    > #{s("zone")}:nth-child(3n) { left: 66.66%; }
+  }
+
+  $tilts: (1: (8deg, -8deg), 2: (8deg, 0deg), 3: (8deg, 8deg),
+           4: (0deg, -8deg), 5: (0deg, 0deg), 6: (0deg, 8deg),
+           7: (-8deg, -8deg), 8: (-8deg, 0deg), 9: (-8deg, 8deg));
+  @each $n, $rot in $tilts {
+    #{s("hover-tilt-grid")}:has(> #{s("zone")}:nth-child(#{$n}):hover) {
+      transform: perspective(#{v(perspective, 900px)})
+        rotateX(list.nth($rot, 1)) rotateY(list.nth($rot, 2));
+    }
+  }
+
+  // --------------------------------------- pointer-fed effects (JS coordinate)
+  // The 6-line feed only sets --an-mx / --an-my. Everything visual is here.
+  #{s("cursor-spotlight")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: radial-gradient(
+        #{v(spotlight-size, 260px)} circle at #{v(mx, 50%)} #{v(my, 50%)},
+        color-mix(in oklab, #{v(glow-color, #fff)} 18%, transparent),
+        transparent 70%
+      );
+    }
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  // The honest CSS-only substitute: centred, not cursor-following.
+  #{s("spotlight-static")} {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: radial-gradient(
+        #{v(spotlight-size, 260px)} circle at 50% 40%,
+        color-mix(in oklab, #{v(glow-color, #fff)} #{v(spotlight-strength, 42%)}, transparent),
+        transparent 70%
+      );
+    }
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+}

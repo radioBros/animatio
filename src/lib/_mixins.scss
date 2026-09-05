@@ -1,0 +1,157 @@
+// Animatio — the effect() mixin. PLAN.md §4.3
+//
+// One declaration in manifest.json produces BOTH shipped forms:
+//   fast    -> keyframes write transform/opacity directly (compositor friendly,
+//              not composable — the last animation to write `transform` wins)
+//   compose -> keyframes write @property channels (composable, main thread)
+//
+// Nothing else in the library emits @keyframes, so `check:manifest` can diff
+// what came out against what was declared.
+
+@use "sass:map";
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "fn" as *;
+
+// Channel -> the transform function it contributes to, in assembly order.
+$channel-defaults: (
+  x: 0px,
+  y: 0px,
+  z: 0px,
+  rx: 0deg,
+  ry: 0deg,
+  rz: 0deg,
+  kx: 0deg,
+  ky: 0deg,
+  sx: 1,
+  sy: 1,
+  o: 1,
+  bl: 0px,
+);
+
+/// The composed transform every compose-mode class carries.
+/// Each keyframe touches only its own channel, so effects stack (§4.1).
+$channels: (x, y, z, rx, ry, rz, kx, ky, sx, sy, o, bl);
+$anim-slots: ();
+@each $ch in $channels {
+  $anim-slots: list.append($anim-slots, var(#{prop("anim-" + $ch)}, none), comma);
+}
+
+@mixin compose-assembly {
+  // One entry per channel. A slot no atom claimed resolves to `none`, which is
+  // an animation with no keyframes and therefore costs nothing. The single
+  // animation-duration / fill-mode from `.an` applies to every entry in the
+  // list, which is what makes the timing stay in one place.
+  animation-name: #{$anim-slots};
+  transform: translate3d(v(x, 0px), v(y, 0px), v(z, 0px))
+    rotateX(v(rx, 0deg)) rotateY(v(ry, 0deg)) rotateZ(v(rz, 0deg))
+    skew(v(kx, 0deg), v(ky, 0deg)) scale3d(v(sx, 1), v(sy, 1), 1);
+  opacity: v(o, 1);
+  filter: blur(v(bl, 0px));
+}
+
+/// Emit @keyframes from a map of `"stop" -> (prop: value, ...)`.
+@mixin frames($name, $frames) {
+  @keyframes #{kf($name)} {
+    @each $stop, $decls in $frames {
+      #{$stop} {
+        @each $property, $value in $decls {
+          #{$property}: #{$value};
+        }
+      }
+    }
+  }
+}
+
+/// Emit one effect: its keyframes plus the class that references them.
+///
+/// $entry is a manifest entry map. Recognised keys:
+///   mode    "fast" | "compose"
+///   raw     frames for fast mode      -> ("0%": (opacity: 0, transform: ...))
+///   ch      frames for compose mode   -> ("0%": (o: 0, y: 100%))
+///   rule    extra declarations placed on the class itself
+@mixin effect($name, $entry) {
+  $mode: map.get($entry, mode) or "fast";
+  $emit-fast: $mode == "fast" and wants-fast();
+  $emit-compose: $mode == "compose" and wants-compose();
+
+  @if $emit-fast {
+    $raw: map.get($entry, raw);
+    @if $raw {
+      @include frames($name, $raw);
+    }
+  }
+
+  @if $emit-compose {
+    $ch: map.get($entry, ch);
+    @if $ch {
+      @keyframes #{kf($name)} {
+        @each $stop, $decls in $ch {
+          #{$stop} {
+            @each $channel, $value in $decls {
+              #{prop($channel)}: #{$value};
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @if $emit-fast or $emit-compose {
+    // NOTE: compose-mode classes do NOT carry the assembly here — one grouped
+    // rule in atoms/_index.scss covers all of them, which is smaller and keeps
+    // the assembly in exactly one place.
+    #{s($name)} {
+      @if $emit-compose {
+        // The slot for the channel this atom owns, never animation-name. Two
+        // atoms on the same channel still collide -- you cannot translate up
+        // and down at once -- and that is the honest result.
+        $ch: map.get($entry, ch);
+        $owned: null;
+        @if $ch {
+          @each $stop, $decls in $ch {
+            @each $channel, $value in $decls {
+              @if $owned == null { $owned: $channel; }
+            }
+          }
+        }
+        @if $owned {
+          #{prop("anim-" + $owned)}: #{kf($name)};
+        } @else {
+          animation-name: #{kf($name)};
+        }
+      } @else {
+        animation-name: #{kf($name)};
+      }
+
+      $rule: map.get($entry, rule);
+      @if $rule {
+        @each $property, $value in $rule {
+          #{$property}: #{$value};
+        }
+      }
+    }
+  }
+}
+
+/// Loop a whole manifest map, emitting only entries belonging to `$module`.
+@mixin emit-module($manifest, $module) {
+  @each $name, $entry in $manifest {
+    @if map.get($entry, module) == $module {
+      @include effect($name, $entry);
+    }
+  }
+}
+
+/// Collect the selectors of every compose-mode entry so one grouped rule can
+/// carry the assembly — no extra class needed on the consumer's element.
+@function compose-selectors($manifest) {
+  $out: ();
+  @each $name, $entry in $manifest {
+    @if map.get($entry, mode) == "compose" {
+      $out: list.append($out, string.unquote(s($name)), comma);
+    }
+  }
+  @return $out;
+}

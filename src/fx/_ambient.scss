@@ -1,0 +1,257 @@
+// Animatio — ambient motion. PLAN.md §10.14
+//
+// Everything here loops forever, so everything here is PAUSED under
+// prefers-reduced-motion (util/_a11y.scss). Continuous motion in the periphery
+// is the exact thing that reduced-motion exists to stop.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  // -------------------------------------------------------------- marquee (◑)
+  // Markup: duplicate the track twice inside .an-marquee so the loop is seamless.
+  // Two or more IDENTICAL children. `min-width: 100%` used to be here to avoid
+  // a trailing gap, but it makes each copy container-width regardless of its
+  // content, so short text scrolls as text-then-void-then-text and the restart
+  // reads as a glitch. Sizing to content and duplicating the track is what
+  // actually loops seamlessly: copy 1 translates fully out exactly as copy 2
+  // reaches its starting position.
+  #{s("marquee")} {
+    display: flex;
+    overflow: hidden;
+    gap: #{v(marquee-gap, 2rem)};
+    white-space: nowrap;
+
+    > * {
+      flex: 0 0 auto;
+      padding-right: #{v(marquee-gap, 2rem)};
+      animation-name: #{kf("marquee")};
+      animation-duration: #{v(duration, 8s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+  @keyframes #{kf("marquee")} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+
+  #{s("marquee-reverse")} > * {
+    animation-direction: reverse;
+  }
+  #{s("marquee-pause-hover")}:hover > * {
+    animation-play-state: paused;
+  }
+  #{s("marquee-vertical")} {
+    flex-direction: column;
+    > * {
+      animation-name: #{kf("marquee-vertical")};
+      min-width: 0;
+      min-height: 100%;
+    }
+  }
+  @keyframes #{kf("marquee-vertical")} {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+  }
+  #{s("marquee-fade-edges")} {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+
+  // A ticker types. It used to be a second marquee, which made the two
+  // indistinguishable and the name meaningless. This is a teletype: type in,
+  // then hold. Pure CSS via steps() over a `ch` width, no JS and no
+  // per-character markup.
+  //
+  // ONE SHOT by default. A caret that keeps blinking is not the same thing as
+  // an effect that keeps running, and a headline that erases itself on a loop
+  // is unreadable. an-ticker-loop is the cycling variant.
+  //
+  // --an-chars must match the character count of the content, and
+  // --an-chars-width the same number in `ch`. The docs set both.
+  #{s("ticker")} {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    border-right: 2px solid #{v(caret-color, currentColor)};
+    font-family: #{v(mono, ui-monospace, SFMono-Regular, Menlo, monospace)};
+    animation-name: #{kf("ticker")}, #{kf("caret")};
+    animation-duration: #{v(duration, 6.5s)}, 0.85s;
+    animation-timing-function: steps(#{v(chars, 32)}, end), steps(1, end);
+    // NOTHING here loops. The caret used to be `infinite`, so after the
+    // one-shot type-in the border kept blinking and the effect read as still
+    // running. It blinks through the type-in and a few beats after, then stops.
+    animation-iteration-count: 1, #{v(caret-blinks, 13)};
+    animation-fill-mode: forwards, forwards;
+  }
+
+  @keyframes #{kf("ticker")} {
+    from { width: 0; }
+    to { width: #{v(chars-width, 32ch)}; }
+  }
+
+  // --------------------------------------------------- multi-line ticker (◐)
+  // an-ticker animates WIDTH, and a width animation only reads as typing when
+  // the text cannot wrap -- so a single element can never both wrap and type.
+  // A block types one CHILD per line instead, each in its own time slot, which
+  // is also how a terminal actually behaves.
+  //
+  //   <p class="an-ticker-block">
+  //     <span style="--an-chars: 21">npm i @radiobros/animatio</span>
+  //     <span style="--an-chars: 14">added 1 package</span>
+  //   </p>
+  //
+  // Each line declares its own length, because CSS cannot count characters.
+  // Lines are indexed here, so no an-stagger wrapper is needed.
+  //
+  // Every line gets the SAME slot, since a cumulative delay would require
+  // summing the lengths of the preceding lines and CSS has no way to do that.
+  // A short line finishes early and waits, which reads as an end-of-line pause.
+  #{s("ticker-block")} {
+    display: block;
+    font-family: #{v(mono, ui-monospace, SFMono-Regular, Menlo, monospace)};
+
+    > * {
+      display: block;
+      width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid transparent;
+      animation-name: #{kf("ticker-line")}, #{kf("ticker-line-caret")};
+      animation-duration: #{v(line-duration, 1.6s)}, #{v(caret-rate, 0.85s)};
+      animation-delay:
+        calc(var(#{prop(i)}, 0) * #{v(line-duration, 1.6s)}),
+        calc(var(#{prop(i)}, 0) * #{v(line-duration, 1.6s)});
+      animation-timing-function: steps(#{v(chars, 28)}, end), steps(1, end);
+      animation-iteration-count: 1, #{v(line-blinks, 2)};
+      // forwards, NOT both: `backwards` would apply the caret's opening frame
+      // during the delay and park a lit caret on every line before its turn.
+      animation-fill-mode: forwards, forwards;
+    }
+
+    // The last line is where the reader stops, so its caret lingers there
+    // instead of vanishing the moment the text lands.
+    > *:last-child {
+      animation-iteration-count: 1, #{v(caret-blinks, 8)};
+    }
+
+    @for $i from 1 through 12 {
+      > *:nth-child(#{$i}) { #{prop(i)}: #{$i - 1}; }
+    }
+  }
+
+  @keyframes #{kf("ticker-line")} {
+    from { width: 0; }
+    to { width: calc(var(#{prop(chars)}, 28) * 1ch); }
+  }
+
+  // Ends TRANSPARENT so that, with fill-mode forwards, a finished line drops
+  // its caret rather than leaving a permanent bar on every row.
+  @keyframes #{kf("ticker-line-caret")} {
+    0% { border-right-color: #{v(caret-color, currentColor)}; }
+    50% { border-right-color: transparent; }
+    100% { border-right-color: transparent; }
+  }
+
+  // The cycling variant: type, hold, erase, repeat.
+
+
+  // ------------------------------------------------------------------ orbits
+  #{s("orbit")} {
+    animation-name: #{kf("orbit")};
+    animation-duration: #{v(duration, 9s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  @keyframes #{kf("orbit")} {
+    from {
+      transform: rotate(0deg) translateX(#{v(orbit-radius, 60px)}) rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg) translateX(#{v(orbit-radius, 60px)}) rotate(-360deg);
+    }
+  }
+
+
+  // ---------------------------------------------------------------- idle life
+  #{s("float")} {
+    animation-name: #{kf("float")};
+    animation-duration: #{v(duration, 4.5s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+  @keyframes #{kf("float")} {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(#{v(float-distance, -10px)}); }
+  }
+
+  #{s("bob")} {
+    animation-name: #{kf("float")};
+    animation-duration: #{v(duration, 2.2s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  #{s("breathe")} {
+    animation-name: #{kf("breathe")};
+    animation-duration: #{v(duration, 5s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+  @keyframes #{kf("breathe")} {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(#{v(breathe-scale, 1.04)}); }
+  }
+
+
+  #{s("sway")} {
+    animation-name: #{kf("sway")};
+    animation-duration: #{v(duration, 6s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    transform-origin: 50% 0;
+  }
+  @keyframes #{kf("sway")} {
+    0%, 100% { transform: rotate(calc(#{v(sway-angle, 7deg)} * -1)); }
+    50% { transform: rotate(#{v(sway-angle, 7deg)}); }
+  }
+
+  #{s("pendulum")} {
+    animation-name: #{kf("sway")};
+    animation-duration: #{v(duration, 2.4s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+    transform-origin: 50% 0;
+  }
+
+  #{s("wiggle")} {
+    animation-name: #{kf("wiggle")};
+    animation-duration: #{v(duration, 0.8s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+  @keyframes #{kf("wiggle")} {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  #{s("jiggle")} {
+    animation-name: #{kf("jiggle")};
+    animation-duration: #{v(duration, 0.5s)};
+    animation-iteration-count: infinite;
+  }
+  @keyframes #{kf("jiggle")} {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, -1px); }
+    75% { transform: translate(1px, 1px); }
+  }
+
+}

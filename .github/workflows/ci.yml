@@ -1,0 +1,44 @@
+# Everything a pull request has to pass before it can land.
+#
+# `npm run verify` is the same command contributors run locally, so CI cannot
+# disagree with a clean local run: gen:manifest, build, build:catalogue,
+# tree-shake fixtures, 22 gates, the size budget, then the tests.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  verify:
+    name: build, gates and tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The floor declared in engines, and current LTS. A contributor on one
+        # should not break the other.
+        node: [18, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify
+        run: npm run verify
+
+      # The catalogue and the docs are built from the library, so a change that
+      # compiles can still break the site. Icons are fetched here rather than
+      # committed, which this also proves still works.
+      - name: Build the docs
+        run: npm run docs:build
+
+      - name: Confirm the package would publish cleanly
+        run: npm pack --dry-run

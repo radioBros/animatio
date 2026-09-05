@@ -1,0 +1,138 @@
+// Animatio — clip and mask reveals. PLAN.md §10.12
+//
+// These are ENTRANCE animations, so they hide their target at 0%. That is safe
+// here (unlike the scroll module) because they are plain time-based animations
+// with fill-mode both — they always run, so the content always ends visible.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  $dirs: (
+    "up": inset(100% 0 0 0),
+    "down": inset(0 0 100% 0),
+    "left": inset(0 100% 0 0),
+    "right": inset(0 0 0 100%),
+    "tl": inset(0 100% 100% 0),
+    "tr": inset(0 0 100% 100%),
+    "bl": inset(100% 100% 0 0),
+    "br": inset(100% 0 0 100%),
+  );
+
+  @each $dir, $from in $dirs {
+    #{s("clip-reveal-" + $dir)} {
+      animation-name: #{kf("clip-reveal-" + $dir)};
+      animation-duration: #{v(duration, 0.9s)};
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    @keyframes #{kf("clip-reveal-" + $dir)} {
+      from {
+        clip-path: $from;
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+  }
+
+  #{s("reveal-iris")} {
+    animation-name: #{kf("reveal-iris")};
+    animation-duration: #{v(duration, 0.9s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes #{kf("reveal-iris")} {
+    from { clip-path: circle(0% at 50% 50%); }
+    to { clip-path: circle(75% at 50% 50%); }
+  }
+
+  #{s("circle-expand")} {
+    animation-name: #{kf("circle-expand")};
+    animation-duration: #{v(duration, 0.8s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes #{kf("circle-expand")} {
+    from { clip-path: circle(0% at 50% 100%); }
+    to { clip-path: circle(140% at 50% 100%); }
+  }
+
+  #{s("reveal-mask-sweep")} {
+    animation-name: #{kf("reveal-mask-sweep")};
+    animation-duration: #{v(duration, 1.1s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    mask-image: linear-gradient(
+      to right,
+      #000 0 var(--_p, 0%),
+      transparent var(--_p, 0%)
+    );
+  }
+  @keyframes #{kf("reveal-mask-sweep")} {
+    from { --_p: 0%; }
+    to { --_p: 130%; }
+  }
+
+
+  #{s("diagonal-wipe")} {
+    animation-name: #{kf("diagonal-wipe")};
+    animation-duration: #{v(duration, 0.9s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  @keyframes #{kf("diagonal-wipe")} {
+    from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+    to { clip-path: polygon(0 0, 140% 0, 100% 100%, 0 100%); }
+  }
+
+  #{s("curtain")} {
+    animation-name: #{kf("curtain")};
+    animation-duration: #{v(duration, 1s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  @keyframes #{kf("curtain")} {
+    from { clip-path: inset(0 50% 0 50%); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+
+  #{s("letterbox")} {
+    animation-name: #{kf("letterbox")};
+    animation-duration: #{v(duration, 1s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  @keyframes #{kf("letterbox")} {
+    from { clip-path: inset(50% 0 50% 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+
+  #{s("shutter")} {
+    animation-name: #{kf("shutter")};
+    animation-duration: #{v(duration, 0.9s)};
+    animation-fill-mode: both;
+    animation-timing-function: steps(6, end);
+  }
+  @keyframes #{kf("shutter")} {
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+
+  // ◑ needs n children (the slats)
+  // Without a perspective on the host, rotateX collapses each slat to a line
+  // instead of swinging it: the animation ran and looked like nothing.
+
+
+  #{s("fold")} {
+    animation-name: #{kf("fold")};
+    animation-duration: #{v(duration, 0.9s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: 50% 0;
+  }
+  @keyframes #{kf("fold")} {
+    from { transform: perspective(#{v(perspective, 900px)}) rotateX(-88deg); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+
+}

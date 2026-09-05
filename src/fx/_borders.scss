@@ -1,0 +1,319 @@
+// Animatio — borders, dividers, shapes. PLAN.md §10.11
+//
+// an-border-beam is the conic-gradient border light. It needs @property on an
+// <angle> to interpolate — an unregistered custom property would jump rather
+// than sweep. That registration is in _tokens.scss (--an-beam-angle).
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  #{s("border-beam")} {
+    position: relative;
+    isolation: isolate;
+    border-radius: #{v(radius, 1rem)};
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      padding: #{v(border-width, 1.5px)};
+      background: conic-gradient(
+        from #{v(beam-angle, 0deg)},
+        transparent 0%,
+        #{v(beam-color, #6ea8ff)} 12%,
+        transparent 24%
+      );
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      animation-name: #{kf("beam-spin")};
+      animation-duration: #{v(duration, 4s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+  @keyframes #{kf("beam-spin")} {
+    to {
+      #{prop(beam-angle)}: 360deg;
+    }
+  }
+
+  #{s("border-double-beam")}::before {
+    background: conic-gradient(
+      from #{v(beam-angle, 0deg)},
+      transparent 0%,
+      #{v(beam-color, #6ea8ff)} 10%,
+      transparent 22%,
+      transparent 50%,
+      #{v(beam-color-2, #ff5f9e)} 60%,
+      transparent 72%
+    );
+  }
+
+  #{s("border-gradient")} {
+    position: relative;
+    border-radius: #{v(radius, 1rem)};
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: #{v(border-width, 1.5px)};
+      background: linear-gradient(
+        #{v(border-angle, 120deg)},
+        #{v(beam-color, #6ea8ff)},
+        #{v(beam-color-2, #b07bff)}
+      );
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  }
+
+  #{s("border-gradient-anim")} {
+    position: relative;
+    border-radius: #{v(radius, 1rem)};
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: #{v(border-width, 1.5px)};
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      background: linear-gradient(
+        #{v(border-angle, 120deg)},
+        #{v(beam-color, #6ea8ff)},
+        #{v(beam-color-2, #b07bff)},
+        #{v(beam-color, #6ea8ff)}
+      );
+      background-size: 220% 100%;
+      animation-name: #{kf("text-pan")};
+      animation-duration: #{v(duration, 5s)};
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+
+  // A `border: dashed` cannot move — nothing about a border is animatable that
+  // way, so the old rule animated background-position against
+  // `background-image: none` and produced a static dashed box. Four repeating
+  // gradients, one per edge, CAN move, which is what makes the ants march.
+  #{s("border-dash-march")} {
+    $dash: #{v(dash-size, 10px)};
+    $w: #{v(border-width, 2px)};
+    $c: color-mix(in oklab, currentColor 55%, transparent);
+
+    background-image:
+      repeating-linear-gradient(90deg, #{$c} 0 #{$dash}, transparent #{$dash} calc(#{$dash} * 2)),
+      repeating-linear-gradient(90deg, #{$c} 0 #{$dash}, transparent #{$dash} calc(#{$dash} * 2)),
+      repeating-linear-gradient(0deg, #{$c} 0 #{$dash}, transparent #{$dash} calc(#{$dash} * 2)),
+      repeating-linear-gradient(0deg, #{$c} 0 #{$dash}, transparent #{$dash} calc(#{$dash} * 2));
+    background-size:
+      100% #{$w},
+      100% #{$w},
+      #{$w} 100%,
+      #{$w} 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    animation-name: #{kf("dash-march")};
+    animation-duration: #{v(duration, 12s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  // One full tile of travel per edge, in opposite directions so the ants circle
+  // the box rather than all sliding the same way.
+  @keyframes #{kf("dash-march")} {
+    to {
+      background-position:
+        #{v(dash-size, 10px)} 0,
+        calc(#{v(dash-size, 10px)} * -1) 100%,
+        0 calc(#{v(dash-size, 10px)} * -1),
+        100% #{v(dash-size, 10px)};
+    }
+  }
+
+  #{s("border-glow")} {
+    border: 1px solid color-mix(in oklab, #{v(glow-color, #6ea8ff)} 45%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, #{v(glow-color, #6ea8ff)} 18%, transparent),
+      0 0 #{v(glow-size, 22px)}
+        color-mix(in oklab, #{v(glow-color, #6ea8ff)} 32%, transparent);
+  }
+
+  // Corner brackets on all FOUR corners. Two pseudo-elements can only ever
+  // draw two of them, which is why it looked half-finished; gradients draw all
+  // four with nothing left over.
+  #{s("border-corner")} {
+    $len: #{v(corner-size, 16px)};
+    $w: #{v(border-width, 2px)};
+
+    background-image:
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor),
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor),
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor),
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+    background-size:
+      #{$len} #{$w}, #{$w} #{$len},
+      #{$len} #{$w}, #{$w} #{$len},
+      #{$len} #{$w}, #{$w} #{$len},
+      #{$len} #{$w}, #{$w} #{$len};
+    background-position:
+      0 0, 0 0,
+      100% 0, 100% 0,
+      0 100%, 0 100%,
+      100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+
+  #{s("border-shine")} {
+    position: relative;
+    overflow: hidden;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        115deg,
+        transparent 40%,
+        color-mix(in oklab, #fff 55%, transparent) 50%,
+        transparent 60%
+      );
+      translate: -120% 0;
+      transition: translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    &:hover::after {
+      translate: 120% 0;
+    }
+  }
+
+  // ------------------------------------------------------------------ dividers
+  #{s("divider-wave")} {
+    height: #{v(divider-height, 18px)};
+    background: currentColor;
+    mask-image: radial-gradient(
+      #{v(divider-height, 18px)} #{v(divider-height, 18px)} at 50% 0,
+      transparent 98%,
+      #000 100%
+    );
+    mask-size: calc(#{v(divider-height, 18px)} * 2) 100%;
+    mask-repeat: repeat-x;
+  }
+
+  // The longhand form did not tile: `mask-size` and `mask-repeat` were being
+  // set beside a `mask-image` that the shorthand's own defaults then reset, so
+  // the divider masked itself away entirely and rendered as nothing. The
+  // shorthand carries position, size and repeat together, which is the only
+  // form that reliably tiles a conic tooth.
+  #{s("divider-zigzag")} {
+    height: #{v(divider-height, 14px)};
+    background: currentColor;
+    // from 135deg, not -45deg. 0deg points UP, so a 90deg sector starting at
+    // -45deg is the wedge ABOVE the apex — entirely outside the element, which
+    // is why the divider masked itself away and rendered as nothing. 135deg to
+    // 225deg is the downward wedge, which is the tooth.
+    mask:
+      conic-gradient(from 135deg at 50% 0%, #000 0 90deg, transparent 90deg)
+      0 0 / calc(#{v(divider-height, 14px)} * 2) 100% repeat-x;
+  }
+
+
+  // -------------------------------------------------------------------- shapes
+  #{s("corner-cut")} {
+    clip-path: polygon(
+      #{v(cut, 16px)} 0,
+      100% 0,
+      100% calc(100% - #{v(cut, 16px)}),
+      calc(100% - #{v(cut, 16px)}) 100%,
+      0 100%,
+      0 #{v(cut, 16px)}
+    );
+  }
+
+
+  #{s("clip-ticket")} {
+    mask-image:
+      radial-gradient(#{v(notch-size, 14px)} at 0 50%, transparent 98%, #000 100%),
+      radial-gradient(#{v(notch-size, 14px)} at 100% 50%, transparent 98%, #000 100%);
+    mask-composite: intersect;
+  }
+
+  #{s("clip-arrow")} {
+    clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+  }
+
+  #{s("clip-blob")} {
+    clip-path: circle(50% at 50% 50%);
+    border-radius: 62% 38% 46% 54% / 55% 47% 53% 45%;
+  }
+
+
+  #{s("tape")} {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      translate: -50% 0;
+      width: 84px;
+      height: 22px;
+      background: color-mix(in oklab, #{v(tape-color, #ffe9a8)} 80%, transparent);
+      rotate: -3deg;
+      box-shadow: 0 2px 6px -2px hsl(#{v(shadow-color, 220 15% 10%)} / 0.3);
+    }
+  }
+
+  #{s("torn-paper")} {
+    mask-image: radial-gradient(
+      8px at 50% 100%,
+      transparent 98%,
+      #000 100%
+    );
+    mask-size: 18px 100%;
+    mask-repeat: repeat-x;
+    mask-position: bottom;
+  }
+
+  // A dog-ear, not a triangle stuck on a corner. Two halves make it read as
+  // folded paper: the card is CLIPPED so the corner is genuinely missing, and
+  // the flap that fills the notch is shaded back-of-the-page dark with a
+  // shadow falling away from the crease.
+  #{s("card-corner-fold")} {
+    position: relative;
+    clip-path: polygon(
+      0 0,
+      calc(100% - #{v(fold, 26px)}) 0,
+      100% #{v(fold, 26px)},
+      100% 100%,
+      0 100%
+    );
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: #{v(fold, 26px)};
+      height: #{v(fold, 26px)};
+      background: linear-gradient(
+        225deg,
+        transparent 0 50%,
+        color-mix(in oklab, currentColor 14%, transparent) 50%,
+        color-mix(in oklab, currentColor 34%, transparent) 100%
+      );
+      border-bottom-left-radius: 3px;
+      box-shadow: -2px 2px 5px -2px hsl(#{v(shadow-color, 220 15% 10%)} / 0.45);
+    }
+  }
+}

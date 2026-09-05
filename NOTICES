@@ -1,0 +1,71 @@
+# Notices
+
+## Licensed dependencies
+
+### animate.css — not a dependency
+
+Animatio's preset catalogue uses the same class NAMES as animate.css, because
+compatibility is the point of a parity layer and a class name is not anybody's
+property. The motion is not theirs.
+
+It used to be. The presets were generated from a pinned copy of animate.css,
+keeping its keyframe percentages, easing curves and transform values and
+substituting tokens for the hardcoded geometry — a derivative work, which is why
+this file once carried their copyright.
+
+`tools/author-parity.mjs` now authors the catalogue from Animatio's own motion
+model: every overshoot comes from one damped-oscillator function rather than
+from hand-picked stops, and the timing functions are Animatio's easing tokens,
+so retuning `--an-ease` retunes the library coherently. Sixty-two of the
+ninety-seven presets are authored that way. The remaining thirty-five are
+two-stop fades and slides — "opacity 0 to 1" has one sensible expression and is
+nobody's invention.
+
+`test/fixtures/animate-4.1.1.css` is kept only so `npm run import:animate` can
+diff the two catalogues and report which class names have drifted apart. It is
+not shipped: `files` excludes it.
+
+Animatio's own MIT notice appears in `LICENSE`, in this file, and in the banner
+comment of every file in `dist/` — preserved through minification, and
+`check:attribution` fails the build if it goes missing.
+
+## Techniques credited
+
+No license requires these — naming your sources is cheap, and it is the
+difference between a library people trust and one people are suspicious of.
+
+- **Scroll-triggered animation via style queries** — Ryan Mulligan.
+  <https://ryanmulligan.dev/blog/scroll-triggered-animations-style-queries/>
+  The Tier-2 latch in `src/scroll/` is this technique.
+
+- **"Run a scroll-driven animation only once"** — Bramus Van Damme.
+  <https://www.bram.us/2023/10/05/run-a-scroll-driven-animation-only-once/>
+  The analysis establishing that pure CSS cannot latch a scrubbed timeline —
+  which is why Animatio ships a tier ladder and an honest limits page rather
+  than a `once` option that quietly does not work.
+
+- **The gooey `feColorMatrix` alpha-crush filter** — a long-standing community
+  technique, popularised through Codrops and CSS-Tricks. `#an-goo` in
+  `assets/animatio-filters.svg`.
+
+- **`backdrop-filter: url()` interoperability** — WebKit bug 245510 and W3C
+  SVGWG issue 1142 are what shaped the entire surfaces module.
+  <https://bugs.webkit.org/show_bug.cgi?id=245510>
+  <https://github.com/w3c/svgwg/issues/1142>
+
+## Build dependencies
+
+sass, postcss, autoprefixer, cssnano — all MIT, all devDependencies. Animatio
+ships zero runtime dependencies.
+
+## Docs site icons
+
+The preview subjects on the documentation site use Font Awesome Pro duotone
+icons, vendored from the project's own CDN mirror into
+`docs/.vitepress/theme/icons/` by `tools/fetch-icons.mjs`.
+
+    Font Awesome Pro 7.2.0 — https://fontawesome.com
+    Copyright 2026 Fonticons, Inc. — Commercial License
+
+They are used by the docs site only. The published `animatio` package contains
+no icons and no Font Awesome code.

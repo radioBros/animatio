@@ -1,0 +1,28 @@
+// Animatio — SVG distortion and displacement. PLAN.md §10.2
+//
+// `filter: url(#id)` on the ELEMENT works cross-browser. It is only
+// `backdrop-filter: url(#id)` that is broken (§9.1) — so everything here is
+// portable, provided the sprite is pasted into the page once (§9.5).
+//
+// Every class is an-svg-* so the class name itself tells you the install step
+// applies. check:svg-naming enforces that exceptionlessly.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

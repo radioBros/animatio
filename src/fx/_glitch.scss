@@ -1,0 +1,327 @@
+// Animatio — glitch, retro, CRT. PLAN.md §10.3
+//
+// ACCESSIBILITY: everything here is capped below 3 Hz and killed outright under
+// prefers-reduced-motion (see util/_a11y.scss). Flashing content is a WCAG 2.3.1
+// seizure risk, not a style choice.
+//
+// an-glitch needs `data-text="…"` duplicated on the element so the two
+// pseudo-layers have something to render. an-glitch-rgb does not — it is the
+// pure-CSS member of the family.
+
+@use "../lib/fn" as *;
+
+// Emitted by fx/_index.scss inside the `animatio.fx` layer.
+@mixin emit {
+
+// ---------------------------------------------------------------- full glitch
+#{s("glitch")} {
+  position: relative;
+  display: inline-block;
+  color: #{v(glitch-color, currentColor)};
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: #{v(glitch-bg, transparent)};
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+  }
+  &::before {
+    left: #{v(glitch-offset, 2px)};
+    text-shadow: -1px 0 #{v(glitch-cyan, #0ff)};
+    animation-name: #{kf("glitch-a")};
+    animation-duration: #{v(glitch-speed, 2.4s)};
+    animation-timing-function: steps(2, end);
+    animation-iteration-count: infinite;
+  }
+  &::after {
+    left: calc(#{v(glitch-offset, 2px)} * -1);
+    text-shadow: 1px 0 #{v(glitch-magenta, #f0f)};
+    animation-name: #{kf("glitch-b")};
+    animation-duration: calc(#{v(glitch-speed, 2.4s)} * 1.3);
+    animation-timing-function: steps(2, end);
+    animation-iteration-count: infinite;
+  }
+}
+
+#{s("glitch-hover")} {
+  &::before,
+  &::after {
+    animation-play-state: paused;
+  }
+  &:hover::before,
+  &:hover::after {
+    animation-play-state: running;
+  }
+}
+
+// ~2.5 Hz at the default speed — deliberately under the 3 Hz threshold.
+@keyframes #{kf("glitch-a")} {
+  0%,
+  100% {
+    clip-path: inset(0 0 92% 0);
+  }
+  20% {
+    clip-path: inset(28% 0 56% 0);
+  }
+  40% {
+    clip-path: inset(64% 0 18% 0);
+  }
+  60% {
+    clip-path: inset(12% 0 78% 0);
+  }
+  80% {
+    clip-path: inset(80% 0 4% 0);
+  }
+}
+
+@keyframes #{kf("glitch-b")} {
+  0%,
+  100% {
+    clip-path: inset(74% 0 12% 0);
+  }
+  20% {
+    clip-path: inset(6% 0 84% 0);
+  }
+  40% {
+    clip-path: inset(46% 0 38% 0);
+  }
+  60% {
+    clip-path: inset(88% 0 2% 0);
+  }
+  80% {
+    clip-path: inset(22% 0 66% 0);
+  }
+}
+
+// ------------------------------------------------------ pure-CSS RGB fringe
+#{s("glitch-rgb")} {
+  text-shadow:
+    #{v(glitch-offset, 2px)} 0 #{v(glitch-magenta, #f0f)},
+    calc(#{v(glitch-offset, 2px)} * -1) 0 #{v(glitch-cyan, #0ff)};
+  animation-name: #{kf("glitch-rgb")};
+  animation-duration: #{v(glitch-speed, 2.4s)};
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(3, end);
+}
+
+@keyframes #{kf("glitch-rgb")} {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(1px);
+  }
+  66% {
+    transform: translateX(-1px);
+  }
+}
+
+
+#{s("glitch-slice")} {
+  position: relative;
+  animation-name: #{kf("glitch-slice")};
+  animation-duration: calc(#{v(glitch-speed, 2.4s)} * 1.6);
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1, end);
+}
+
+@keyframes #{kf("glitch-slice")} {
+  0%,
+  100% {
+    clip-path: none;
+    transform: none;
+  }
+  12% {
+    clip-path: inset(18% 0 62% 0);
+    transform: translateX(-6px);
+  }
+  14% {
+    clip-path: none;
+    transform: none;
+  }
+  46% {
+    clip-path: inset(58% 0 22% 0);
+    transform: translateX(5px);
+  }
+  48% {
+    clip-path: none;
+    transform: none;
+  }
+}
+
+// ------------------------------------------------------------------- CRT / TV
+#{s("scanlines")} {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, #{v(scanline-alpha, 0.22)}) 0 1px,
+      transparent 1px #{v(scanline-gap, 3px)}
+    );
+  }
+}
+
+
+// Gentle luminance drift, ~0.3 Hz. Nowhere near a flash.
+
+#{s("vhs")} {
+  position: relative;
+  overflow: hidden;
+  filter: saturate(1.25) contrast(1.05);
+  animation-name: #{kf("vhs-track")};
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1, end);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 255, 255, 0.12) 48%,
+      transparent 52%
+    );
+    animation-name: #{kf("vhs-band")};
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes #{kf("vhs-track")} {
+  0%,
+  92%,
+  100% {
+    transform: translateX(0);
+  }
+  94% {
+    transform: translateX(-3px);
+  }
+  96% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes #{kf("vhs-band")} {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+// --------------------------------------------------------- raster treatments
+#{s("pixelate")} {
+  image-rendering: pixelated;
+}
+
+#{s("dither")} {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: #{v(dither-strength, 0.5)};
+    // 4x4 Bayer-ish ordered pattern from two offset gradients.
+    background-image:
+      repeating-conic-gradient(#000 0% 25%, transparent 0% 50%),
+      repeating-conic-gradient(transparent 0% 25%, #fff 0% 50%);
+    background-size: 4px 4px, 2px 2px;
+  }
+}
+
+#{s("halftone")} {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    background-image: radial-gradient(
+      circle at center,
+      #000 #{v(halftone-dot, 32%)},
+      transparent #{v(halftone-dot, 32%)}
+    );
+    background-size: #{v(halftone-size, 6px)} #{v(halftone-size, 6px)};
+    opacity: #{v(halftone-strength, 0.35)};
+  }
+}
+
+#{s("noise-static")} {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: #{v(noise-opacity, 0.12)};
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+    animation-name: #{kf("static-shift")};
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: steps(4, end);
+  }
+}
+
+@keyframes #{kf("static-shift")} {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: -12px 8px;
+  }
+  50% {
+    background-position: 9px -14px;
+  }
+  75% {
+    background-position: -7px -5px;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+// ------------------------------------------------------------------ terminal
+#{s("terminal")} {
+  font-family: #{v(mono, ui-monospace, SFMono-Regular, Menlo, monospace)};
+  color: #{v(terminal-color, #7dffa1)};
+  background: #{v(terminal-bg, #04120a)};
+  padding: 1rem 1.1rem;
+  border-radius: 8px;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.25) 0 1px,
+      transparent 1px 3px
+    );
+  }
+}
+
+
+}

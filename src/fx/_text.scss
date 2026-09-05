@@ -1,0 +1,423 @@
+// Animatio — text effects. PLAN.md §10.6
+//
+// The split-* family needs per-character spans (◑). CSS has no ::nth-letter(),
+// so that is a markup helper and the docs say so. an-text-scramble is the one
+// effect here that is genuinely impossible — CSS cannot author text content —
+// and an-text-flip-chars is the honest CSS-only substitute.
+
+@use "../lib/fn" as *;
+
+@mixin emit {
+  // ------------------------------------------------------------------ gradient
+  #{s("text-gradient")} {
+    background-image: linear-gradient(
+      #{v(text-gradient-angle, 100deg)},
+      #{v(text-from, #6ea8ff)},
+      #{v(text-to, #b07bff)}
+    );
+    background-clip: text;
+    color: transparent;
+  }
+
+  #{s("text-gradient-anim")} {
+    background-image: linear-gradient(
+      #{v(text-gradient-angle, 100deg)},
+      #{v(text-from, #6ea8ff)},
+      #{v(text-to, #b07bff)},
+      #{v(text-from, #6ea8ff)}
+    );
+    background-size: 220% 100%;
+    background-clip: text;
+    color: transparent;
+    animation-name: #{kf("text-pan")};
+    animation-duration: #{v(duration, 6s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes #{kf("text-pan")} {
+    to {
+      background-position: 200% 0;
+    }
+  }
+
+  #{s("text-rainbow")} {
+    background-image: linear-gradient(
+      100deg,
+      #ff5f9e,
+      #ffd479,
+      #6affc4,
+      #4fd8ff,
+      #a97bff,
+      #ff5f9e
+    );
+    background-size: 300% 100%;
+    background-clip: text;
+    color: transparent;
+    animation-name: #{kf("text-pan")};
+    animation-duration: #{v(duration, 8s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  // The highlight is derived from the text colour, not hardcoded to white:
+  // a white sweep over dark ink works, but over a light page the text simply
+  // disappears for half the cycle.
+  #{s("text-shimmer")} {
+    background-image: linear-gradient(
+      100deg,
+      #{v(ink, CanvasText)} 40%,
+      #{v(shimmer-color, color-mix(in oklab, #{v(ink, CanvasText)} 25%, #fff))} 50%,
+      #{v(ink, CanvasText)} 60%
+    );
+    background-size: 220% 100%;
+    background-clip: text;
+    color: transparent;
+    animation-name: #{kf("text-pan")};
+    animation-duration: #{v(duration, 2.6s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  // ---------------------------------------------------------------- typewriter
+
+  @keyframes #{kf("caret")} {
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  // ------------------------------------------------------------- outline / fill
+  // NOT currentColor: `color: transparent` on the same rule makes currentColor
+  // resolve to transparent, so the stroke was drawn in nothing at all.
+  #{s("text-outline")} {
+    color: transparent;
+    -webkit-text-stroke: #{v(stroke-width, 1px)} #{v(stroke-color, CanvasText)};
+  }
+
+  #{s("text-knockout")} {
+    background-color: #{v(ink, CanvasText)};
+    background-clip: text;
+    color: transparent;
+    mix-blend-mode: multiply;
+  }
+
+  #{s("text-mask-image")} {
+    background-image: #{v(text-image, linear-gradient(45deg, #6ea8ff, #b07bff))};
+    background-size: cover;
+    background-position: center;
+    background-clip: text;
+    color: transparent;
+  }
+
+
+  #{s("text-liquid-fill")} {
+    background-image: linear-gradient(
+      to top,
+      #{v(liquid-color, #4f9dff)} 50%,
+      color-mix(in oklab, #{v(ink, CanvasText)} 35%, transparent) 50%
+    );
+    background-size: 100% 220%;
+    background-clip: text;
+    color: transparent;
+    animation-name: #{kf("liquid-rise")};
+    animation-duration: #{v(duration, 4s)};
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+  }
+  @keyframes #{kf("liquid-rise")} {
+    to {
+      background-position: 0 100%;
+    }
+  }
+
+  // ------------------------------------------------------------------- focus
+  #{s("text-blur-focus")} {
+    animation-name: #{kf("text-focus")};
+    animation-duration: #{v(duration, 1.2s)};
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes #{kf("text-focus")} {
+    0% {
+      filter: blur(#{v(blur-from, 12px)});
+      opacity: 0;
+      letter-spacing: 0.3em;
+    }
+    100% {
+      filter: blur(0);
+      opacity: 1;
+      letter-spacing: normal;
+    }
+  }
+
+  // ------------------------------------------------------- underlines / marks
+  #{s("text-underline-draw")} {
+    position: relative;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.12em;
+      height: #{v(underline-width, 2px)};
+      background: #{v(underline-color, currentColor)};
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    &:hover::after,
+    &:focus-visible::after {
+      transform: scaleX(1);
+    }
+  }
+
+  #{s("hover-underline-wipe")}::after {
+    transform: scaleX(1);
+    transform-origin: 100% 50%;
+    transition: transform 0.32s ease;
+  }
+  #{s("hover-underline-wipe")}:hover::after {
+    transform: scaleX(0);
+  }
+
+  #{s("text-wavy-underline")} {
+    text-decoration: underline wavy #{v(underline-color, currentColor)};
+    text-underline-offset: 0.22em;
+  }
+
+  #{s("text-marker")} {
+    background-image: linear-gradient(
+      to top,
+      color-mix(in oklab, #{v(marker-color, #ffe066)} 85%, transparent) 0 42%,
+      transparent 42%
+    );
+    background-size: 100% 100%;
+    padding-inline: 0.1em;
+  }
+
+  #{s("text-highlight-sweep")} {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, #{v(marker-color, #ffe066)} 85%, transparent) 0 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: 0 0;
+    transition: background-size 0.42s cubic-bezier(0.65, 0, 0.35, 1);
+
+    &:hover {
+      background-size: 100% 100%;
+    }
+  }
+
+  // ------------------------------------------------------------ dimensional
+  #{s("text-3d")} {
+    text-shadow:
+      1px 1px 0 color-mix(in oklab, currentColor 70%, #000),
+      2px 2px 0 color-mix(in oklab, currentColor 55%, #000),
+      3px 3px 0 color-mix(in oklab, currentColor 40%, #000),
+      4px 4px 6px hsl(#{v(shadow-color, 220 15% 10%)} / 0.3);
+  }
+
+  #{s("text-extrude")} {
+    text-shadow:
+      0 1px 0 #bbb, 0 2px 0 #b3b3b3, 0 3px 0 #aaa, 0 4px 0 #a2a2a2,
+      0 5px 0 #999, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1),
+      0 3px 5px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  #{s("text-long-shadow")} {
+    text-shadow: #{v(long-shadow,
+      1px 1px 0 var(--an-long-shadow-color, #c9c2bb),
+      2px 2px 0 var(--an-long-shadow-color, #c9c2bb),
+      3px 3px 0 var(--an-long-shadow-color, #c9c2bb),
+      4px 4px 0 var(--an-long-shadow-color, #c9c2bb),
+      5px 5px 0 var(--an-long-shadow-color, #c9c2bb),
+      6px 6px 0 var(--an-long-shadow-color, #c9c2bb))};
+    filter: drop-shadow(0 6px 10px hsl(#{v(shadow-color, 220 15% 10%)} / 0.28));
+  }
+
+
+
+  #{s("text-fire")} {
+    background-image: linear-gradient(0deg, #ff3d00, #ffb300 55%, #ffe57f);
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255, 106, 0, 0.55));
+  }
+  #{s("text-ice")} {
+    background-image: linear-gradient(0deg, #1e88e5, #81d4fa 60%, #e1f5fe);
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 10px rgba(129, 212, 250, 0.55));
+  }
+  // A chrome ramp needs dark stops or it disappears on a light surface.
+  #{s("text-metal")} {
+    background-image: linear-gradient(
+      180deg,
+      #8a8f98 0%, #3d434d 22%, #c9ced6 46%, #2b3038 60%, #7b818b 82%, #4a5058 100%
+    );
+    background-clip: text;
+    color: transparent;
+  }
+
+  // ---------------------------------------------------- variable-font morphing
+  /* @support-status  core
+   * @feature         font-variation-settings interpolation
+   * @browsers        needs a variable font loaded; degrades to no morph
+   */
+  #{s("text-weight-morph")} {
+    animation-name: #{kf("weight-morph")};
+    animation-duration: #{v(duration, 4s)};
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+  }
+  @keyframes #{kf("weight-morph")} {
+    from {
+      font-variation-settings: "wght" #{v(weight-from, 300)};
+    }
+    to {
+      font-variation-settings: "wght" #{v(weight-to, 800)};
+    }
+  }
+
+  // -------------------------------------------------------------- marquee text
+  // Shares an-marquee's keyframe, so it must share its default duration too.
+  // It did not, and sat at 14s while an-marquee was slowed twice — which is
+  // why the marquee still looked fast after both changes.
+  #{s("text-marquee")} {
+    display: inline-block;
+    white-space: nowrap;
+    animation-name: #{kf("marquee")};
+    animation-duration: #{v(duration, 8s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  // ------------------------------------------------- split-* (◑ needs spans)
+  // Each child span consumes --an-i for its stagger. The docs ship the splitter
+  // snippet; this is a markup helper, not CSS-only, and we say so.
+  #{s("text-split-chars")} > * {
+    display: inline-block;
+    animation-delay: calc(var(--an-i, 0) * #{v(char-stagger, 40ms)});
+  }
+
+  #{s("text-wave")} > * {
+    display: inline-block;
+    animation-name: #{kf("text-wave")};
+    animation-duration: #{v(duration, 1.6s)};
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: calc(var(--an-i, 0) * 60ms);
+  }
+  @keyframes #{kf("text-wave")} {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    35% {
+      transform: translateY(-0.28em);
+    }
+  }
+
+  #{s("text-jump")} > * {
+    display: inline-block;
+    animation-name: #{kf("text-jump")};
+    animation-duration: #{v(duration, 1.1s)};
+    animation-iteration-count: infinite;
+    animation-delay: calc(var(--an-i, 0) * 55ms);
+  }
+  @keyframes #{kf("text-jump")} {
+    0%, 60%, 100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-0.4em);
+    }
+  }
+
+  #{s("text-scatter")} > * {
+    display: inline-block;
+    animation-name: #{kf("text-scatter")};
+    animation-duration: #{v(duration, 0.9s)};
+    animation-fill-mode: both;
+    animation-delay: calc(var(--an-i, 0) * 35ms);
+  }
+  @keyframes #{kf("text-scatter")} {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.2em, 0) rotate(-14deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  #{s("text-shuffle-in")} > * {
+    display: inline-block;
+    animation-name: #{kf("text-shuffle")};
+    animation-duration: #{v(duration, 0.7s)};
+    animation-fill-mode: both;
+    animation-delay: calc(var(--an-i, 0) * 45ms);
+  }
+  @keyframes #{kf("text-shuffle")} {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(-0.4em);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: none;
+    }
+  }
+
+  // The honest CSS-only stand-in for an-text-scramble: flip each glyph in
+  // place to reveal the final one. CSS cannot rewrite text content (§10.16).
+  #{s("text-flip-chars")} > * {
+    display: inline-block;
+    animation-name: #{kf("text-flip-char")};
+    animation-duration: #{v(duration, 0.6s)};
+    animation-fill-mode: both;
+    animation-delay: calc(var(--an-i, 0) * 40ms);
+    transform-style: preserve-3d;
+  }
+  @keyframes #{kf("text-flip-char")} {
+    from {
+      transform: rotateX(-90deg);
+      opacity: 0;
+    }
+    to {
+      transform: rotateX(0);
+      opacity: 1;
+    }
+  }
+
+
+  #{s("text-sparkle")} > * {
+    display: inline-block;
+    animation-name: #{kf("sparkle")};
+    animation-duration: #{v(duration, 2.2s)};
+    animation-iteration-count: infinite;
+    animation-delay: calc(var(--an-i, 0) * 120ms);
+  }
+  // The glint used to occupy 4% of the cycle and was drawn in white on a light
+  // page: it was there, and invisible. It now lasts long enough to see and is
+  // drawn in the accent colour, which reads on either theme.
+  @keyframes #{kf("sparkle")} {
+    0%, 70%, 100% {
+      text-shadow: none;
+    }
+    85% {
+      text-shadow:
+        0 0 6px #{v(glow-color, #ffd166)},
+        0 0 14px #{v(glow-color, #ffd166)};
+    }
+  }
+}

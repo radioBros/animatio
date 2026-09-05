@@ -1,0 +1,108 @@
+// Animatio — helpers and accessibility. PLAN.md §11, §12
+//
+// The reduced-motion BLOCK is not here: it is generated at build time from the
+// compiled CSS, so it covers every class that actually sets animation-name —
+// including the ~380 in the fx catalogue that never carry the .an engine class.
+// A hand-written selector list would have silently missed most of the library.
+// See tools/build.mjs -> injectReducedMotion().
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+
+@if emits("util") {
+  @include l.layer(util) {
+    // ------------------------------------------------------------------ layout
+    // animate.css's single most-reported bug is slideInLeft creating page
+    // scrollbars. This is the fix, and the docs lead with it.
+
+    // Required by the flip / hinge / 3D families. A missing perspective is the
+    // #1 reason a 3D effect renders flat.
+    #{s("3d")} {
+      perspective: #{v(perspective, 1200px)};
+      perspective-origin: 50% 50%;
+    }
+
+    // ------------------------------------------------------------- performance
+    // will-change ON TRIGGER ONLY. A permanently parked will-change on 200
+    // cards is worse than none at all.
+    #{s("gpu")} {
+      &:hover,
+      &:focus-within,
+      &#{s("armed")} {
+        will-change: transform, opacity;
+      }
+    }
+
+    #{s("contain")} {
+      contain: layout paint;
+      content-visibility: auto;
+      contain-intrinsic-size: auto #{v(intrinsic, 480px)};
+    }
+
+    // ------------------------------------------------------------------ state
+    #{s("armed")} {
+      #{prop(play)}: running;
+    }
+    #{s("seen")} {
+      // Hook for the optional IntersectionObserver enhancer (optional/).
+      #{prop(play)}: running;
+    }
+
+    // --------------------------------------------------------------- a11y opt
+    // WCAG 2.3.3 only requires removing NON-ESSENTIAL motion. A loading spinner
+    // is informational, so this class keeps it alive under reduced-motion.
+    #{s("motion-ok")} {
+      animation-duration: #{v(duration, 1s)} !important;
+      animation-iteration-count: #{v(iterations, infinite)} !important;
+    }
+
+    // Screen-reader-only, for the labels that generated-content effects need
+    // (an-count-up in particular — counter() output is not exposed to AT).
+    #{s("sr-only")} {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    // --------------------------------------------- reduced transparency/contrast
+    // Required for the glass module to be defensible at all.
+    @media (prefers-reduced-transparency: reduce) {
+      [class*="#{p()}-glass"] {
+        backdrop-filter: none !important;
+        background: color-mix(
+          in oklab,
+          #{v(glass-tint, #fff)} 92%,
+          transparent
+        ) !important;
+      }
+      #{s("noise")}::after {
+        display: none;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      [class*="#{p()}-glass"] {
+        backdrop-filter: none !important;
+        background: Canvas !important;
+        border-color: CanvasText !important;
+      }
+      #{s("text-gradient")},
+      #{s("text-gradient-anim")},
+      #{s("text-rainbow")},
+      #{s("text-shimmer")},
+      #{s("text-holographic")},
+      #{s("text-metal")},
+      #{s("text-fire")},
+      #{s("text-ice")} {
+        background-image: none !important;
+        color: CanvasText !important;
+      }
+    }
+  }
+}

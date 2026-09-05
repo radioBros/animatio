@@ -1,0 +1,196 @@
+// Animatio — the single declaration site for every registered custom property.
+// PLAN.md §3.2 (conventions), §4.2 (channels), §5 Tier 4 (timing tokens),
+// §8.2.2 (inheriting stagger index).
+//
+// Registration buys three things:
+//   1. Channels interpolate smoothly instead of flipping discretely.
+//   2. A bad value degrades to `initial-value` instead of to the property's CSS
+//      initial — which is what stops a leaked typed-attr() from making every
+//      animation 0s long (§5 Tier 4).
+//   3. The tree-shake resolver can dependency-track which channels an effect
+//      actually animates (§14.2).
+
+@use "lib/fn" as *;
+@use "lib/layers" as l;
+@use "config";
+
+// The @layer statement must precede every layered rule (§3.3).
+@include l.statement;
+
+@include l.layer(tokens) {
+  // ------------------------------------------------------- transform channels
+  // inherits:false — a parent's transform must never leak into a child's.
+  @property #{prop(x)} {
+    syntax: "<length-percentage>";
+    inherits: false;
+    initial-value: 0px;
+  }
+  @property #{prop(y)} {
+    syntax: "<length-percentage>";
+    inherits: false;
+    initial-value: 0px;
+  }
+  @property #{prop(z)} {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+  @property #{prop(rx)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(ry)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(rz)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(sx)} {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
+  }
+  @property #{prop(sy)} {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
+  }
+  @property #{prop(kx)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(ky)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(o)} {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
+  }
+  @property #{prop(bl)} {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  // ----------------------------------------------------------- timing / geometry
+  // inherits:true on duration/stagger/distance so a container can set the tone
+  // for a whole group. See §8.2.2 for why --an-i MUST inherit.
+  // NOT REGISTERED: --an-duration, --an-distance and --an-angle.
+  //
+  // A registered custom property ALWAYS has a value (its initial-value), so
+  // `var(--an-duration, 28s)` can never reach its fallback. Registering these
+  // silently killed every per-effect default in the library: the 28s marquee
+  // ran in 1s, the 9s ticker typed at nine times speed, and — worst — the
+  // entire rotate family span 0deg instead of 200deg, because --an-angle's
+  // initial-value overrode every rotation in the parity module.
+  //
+  // These three are AUTHOR CONFIG, where a per-effect default is the whole
+  // point, so they stay unregistered and inherit normally. --an-i and
+  // --an-stagger stay registered because they are consumed inside calc(),
+  // where an unset value would invalidate the declaration outright.
+  // check:dead-fallbacks keeps this from regressing.
+  @property #{prop(delay)} {
+    syntax: "<time>";
+    inherits: false;
+    initial-value: 0s;
+  }
+  @property #{prop(stagger)} {
+    syntax: "<time>";
+    inherits: true;
+    initial-value: 80ms;
+  }
+  @property #{prop(i)} {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  // --------------------------------------------------- scroll-reveal latch (§8.2)
+  // inherits:true is MANDATORY or the style query never reaches descendants.
+  @property #{prop(on)} {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  // -------------------------------------------------- animation-name slots
+  // The whole composition claim rests on these. Two classes that both declare
+  // `animation-name` collide -- the last one in the stylesheet wins and the
+  // other silently does nothing, which is exactly the failure the atoms exist
+  // to avoid. So an atom does NOT write animation-name; it writes the slot for
+  // the channel it owns, and one assembly rule reads every slot into a list.
+  // Because each atom writes a DIFFERENT property, nothing overwrites anything.
+  //
+  // inherits: false is load-bearing -- a slot set on a parent would otherwise
+  // hand its animation to every descendant that carries any atom class.
+  //
+  // No initial-value: a registered property that has one can never reach the
+  // `var(--x, none)` fallback, and `none` is what an unused slot must resolve
+  // to. check:dead-fallbacks guards this.
+  @each $ch in (x, y, z, rx, ry, rz, kx, ky, sx, sy, o, bl) {
+    @property #{prop("anim-" + $ch)} {
+      syntax: "*";
+      inherits: false;
+    }
+  }
+
+  // ----------------------------------------------------------- effect channels
+  @property #{prop(spin)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(beam-angle)} {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property #{prop(count)} {
+    syntax: "<integer>";
+    inherits: false;
+    initial-value: 0;
+  }
+  @property #{prop(pos)} {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+  }
+
+  // ------------------------------------------- unregistered defaults on :root
+  // Values that cannot be @property-registered (keywords, shorthand lists) or
+  // that never animate. They still get a fallback at every use site (§2.3).
+  :root {
+    #{prop(ease)}: #{config.$ease};
+    #{prop(iterations)}: 1;
+    #{prop(direction)}: normal;
+    #{prop(fill)}: both;
+    #{prop(play)}: running;
+    #{prop(origin)}: #{config.$origin};
+    #{prop(distance-big)}: #{config.$distance-big};
+    #{prop(perspective)}: #{config.$perspective};
+    // The ink colour for background-clip:text effects. It CANNOT be
+    // currentColor: those effects set `color: transparent` on the same element,
+    // so currentColor resolves to transparent and the ink half of the gradient
+    // disappears. CanvasText is a system colour and follows light/dark.
+    #{prop(ink)}: CanvasText;
+    #{prop(scale-from)}: 0.3;
+    #{prop(scale-to)}: 1;
+    #{prop(blur-from)}: 12px;
+    #{prop(range-start)}: entry 0%;
+    #{prop(range-end)}: entry 100%;
+    // Trigger ACTIVATION range — "while in view", not "while entering".
+    // See scroll/_index.scss for why these are separate from the scrub range.
+    #{prop(trigger-start)}: entry 100%;
+    #{prop(trigger-end)}: exit 0%;
+    #{prop(axis)}: block;
+  }
+}

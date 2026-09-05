@@ -1,0 +1,214 @@
+// Animatio — the 4-tier prop API. PLAN.md §5
+//
+//   Tier 1  inline custom properties   style="--an-duration: 1.2s"   universal
+//   Tier 2  enumerated data-attributes data-an-speed="slow"          universal
+//   Tier 3  utility classes            an-slow an-delay-3            universal
+//   Tier 4  typed attr()               data-an-duration="1.4s"       Chrome 133+
+//
+// Tiers 1–3 are the contract: every value is expressible in all three, in every
+// browser. Tier 4 only improves ergonomics where it lands.
+//
+// This module sits in the `props` layer, AFTER `effects`, so an attribute or
+// utility beats an effect's own value with no specificity hacks (§3.3).
+
+@use "sass:map";
+@use "sass:math";
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+@use "../lib/easing" as e;
+@use "../config";
+
+@if emits("props") {
+  @include l.layer(props) {
+    // ------------------------------------------------- Tier 2: data attributes
+    $speeds: (
+      "slower": 3s,
+      "slow": 2s,
+      "normal": 1s,
+      "fast": 0.8s,
+      "faster": 0.5s,
+    );
+    @each $name, $time in $speeds {
+      [data-#{p()}-speed="#{$name}"] {
+        #{prop(duration)}: $time;
+      }
+    }
+
+    @for $i from 1 through 5 {
+      [data-#{p()}-delay="#{$i}"] {
+        #{prop(delay)}: #{$i}s;
+      }
+    }
+
+    [data-#{p()}-repeat="infinite"] {
+      #{prop(iterations)}: infinite;
+    }
+    @for $i from 1 through 5 {
+      [data-#{p()}-repeat="#{$i}"] {
+        #{prop(iterations)}: $i;
+      }
+    }
+
+    [data-#{p()}-direction="reverse"] {
+      #{prop(direction)}: reverse;
+    }
+    [data-#{p()}-direction="alternate"] {
+      #{prop(direction)}: alternate;
+    }
+
+    // Easing presets, as both an attribute and a utility class.
+    @each $name, $curve in e.$curves {
+      [data-#{p()}-ease="#{$name}"],
+      #{s("ease-" + $name)} {
+        #{prop(ease)}: $curve;
+      }
+    }
+    // linear() springs, with a cubic-bezier() fallback for older engines.
+    @each $name, $curve in e.$springs {
+      [data-#{p()}-ease="#{$name}"],
+      #{s("ease-" + $name)} {
+        #{prop(ease)}: e.curve($name);
+      }
+    }
+    @supports (animation-timing-function: linear(0, 1)) {
+      @each $name, $curve in e.$springs {
+        [data-#{p()}-ease="#{$name}"],
+        #{s("ease-" + $name)} {
+          #{prop(ease)}: $curve;
+        }
+      }
+    }
+
+    // -------------------------------------------------- Tier 3: utility classes
+    #{s("slower")} {
+      #{prop(duration)}: 3s;
+    }
+    #{s("slow")} {
+      #{prop(duration)}: 2s;
+    }
+    #{s("fast")} {
+      #{prop(duration)}: 0.8s;
+    }
+    #{s("faster")} {
+      #{prop(duration)}: 0.5s;
+    }
+
+    @for $i from 1 through 5 {
+      #{s("delay-#{$i}s")} {
+        #{prop(delay)}: #{$i}s;
+      }
+    }
+
+    #{s("infinite")} {
+      #{prop(iterations)}: infinite;
+    }
+    @for $i from 1 through 3 {
+      #{s("repeat-#{$i}")} {
+        #{prop(iterations)}: $i;
+      }
+    }
+
+    #{s("reverse")} {
+      #{prop(direction)}: reverse;
+    }
+    #{s("alternate")} {
+      #{prop(direction)}: alternate;
+    }
+    #{s("paused")} {
+      #{prop(play)}: paused;
+    }
+    #{s("running")} {
+      #{prop(play)}: running;
+    }
+    #{s("fill-none")} {
+      #{prop(fill)}: none;
+    }
+    #{s("fill-forwards")} {
+      #{prop(fill)}: forwards;
+    }
+    #{s("fill-backwards")} {
+      #{prop(fill)}: backwards;
+    }
+
+    // transform-origin presets
+    $origins: (
+      "top": 50% 0%,
+      "bottom": 50% 100%,
+      "left": 0% 50%,
+      "right": 100% 50%,
+      "center": 50% 50%,
+      "top-left": 0% 0%,
+      "top-right": 100% 0%,
+      "bottom-left": 0% 100%,
+      "bottom-right": 100% 100%,
+    );
+    @each $name, $value in $origins {
+      #{s("origin-" + $name)} {
+        #{prop(origin)}: $value;
+      }
+    }
+
+    // ------------------------------------------------------ Tier 4: typed attr()
+    /* @support-status  limited
+     * @feature         attr() with type()
+     * @browsers        Chrome 133+; not in Safari or Firefox
+     * @fallback        Tiers 1-3 express every one of these values
+     * @checked         2026-09-04
+     * @source          https://developer.chrome.com/blog/advanced-attr
+     *
+     * The @supports guard is load-bearing, not a hedge: a custom property
+     * accepts the token stream at parse time, so an unsupported attr() only
+     * fails later at var() substitution — where the fallback no longer applies
+     * and animation-duration would drop to its initial 0s. See PLAN.md §5.
+     */
+    @supports (x: attr(x type(*))) {
+      [data-#{p()}-duration] {
+        #{prop(duration)}: attr(data-#{p()}-duration type(<time>), 1s);
+      }
+      [data-#{p()}-delay] {
+        #{prop(delay)}: attr(data-#{p()}-delay type(<time>), 0s);
+      }
+      [data-#{p()}-distance] {
+        #{prop(distance)}: attr(data-#{p()}-distance type(<length-percentage>), 100%);
+      }
+      [data-#{p()}-angle] {
+        #{prop(angle)}: attr(data-#{p()}-angle type(<angle>), 0deg);
+      }
+      [data-#{p()}-stagger] {
+        #{prop(stagger)}: attr(data-#{p()}-stagger type(<time>), 80ms);
+      }
+      [data-#{p()}-iterations] {
+        #{prop(iterations)}: attr(data-#{p()}-iterations type(<number>), 1);
+      }
+    }
+
+    // ------------------------------------------------------------ stagger (§5.3)
+    // --an-i and --an-stagger are registered as INHERITING (see _tokens.scss).
+    // That is what makes stagger survive a scroll-reveal wrapper, where the
+    // indexed element and the animated element are different nodes (§8.2.2).
+    @for $i from 1 through config.$stagger-max {
+      #{s("stagger")} > *:nth-child(#{$i}) {
+        #{prop(i)}: #{$i - 1};
+      }
+      #{s("stagger-reverse")} > *:nth-last-child(#{$i}) {
+        #{prop(i)}: #{$i - 1};
+      }
+    }
+
+    // The delay is computed on the ANIMATED element, and the index is consumed
+    // exactly one level deep — through a reveal wrapper and no further. A .an
+    // nested deeper (an icon inside an animated card) keeps its own delay
+    // rather than silently inheriting the card's index.
+    #{s("stagger")} > .#{p()},
+    #{s("stagger")} > #{s("reveal")} > .#{p()},
+    #{s("stagger-reverse")} > .#{p()},
+    #{s("stagger-reverse")} > #{s("reveal")} > .#{p()} {
+      animation-delay: calc(#{v(delay, 0s)} + #{v(i, 0)} * #{v(stagger, 80ms)});
+    }
+
+    // Opt a subtree out of an inherited index entirely.
+    #{s("stagger-stop")} {
+      #{prop(i)}: 0;
+    }
+  }
+}

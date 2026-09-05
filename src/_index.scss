@@ -1,0 +1,22 @@
+// Animatio — the single entry point.
+//
+//   @use "animatio";
+//   @use "animatio" with ($prefix: "fx", $emit-fx: false, $mode: "fast");
+//
+// PLAN.md §3.1
+//
+// Load order IS cascade order for the un-layered build, and the @layer
+// statement (emitted at the top of `tokens`) fixes it for the layered one.
+
+@forward "config";
+
+@use "tokens";
+@use "core/base";
+@use "core/props";
+@use "effects/index" as effects;
+@use "atoms/index" as atoms;
+@use "scroll/index" as scroll;
+@use "surfaces/index" as surfaces;
+@use "fx/index" as fx;
+@use "util/index" as util;
+@use "compat/index" as compat;

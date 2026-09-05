@@ -1,0 +1,391 @@
+// Animatio — scroll-driven animation. PLAN.md §8
+//
+// TWO families, because view() binds progress to scroll POSITION:
+//   an-scrub-*   progress follows the scrollbar; reverses on scroll-up.
+//                Back-and-forth is the FREE default here, not a feature.
+//   an-reveal    fires on entry and plays at its own speed. This is the hard
+//                one — pure CSS cannot latch a scrubbed timeline.
+//
+// RULE §2.2 — the only place this library gates on support. Any rule that HIDES
+// content lives inside @supports and nowhere else, so Firefox stable (which
+// still has scroll-driven animations behind a flag) renders finished, readable
+// content rather than an invisible page.
+
+@use "../lib/fn" as *;
+@use "../lib/layers" as l;
+
+$tier3: "(animation-trigger: --t play-once)";
+$tier2: "(animation-timeline: view()) and (not #{$tier3})";
+
+@if emits("scroll") {
+  @include l.layer(scroll) {
+    // =====================================================================
+    // an-reveal — the wrapper contract, identical at every tier (§8.2.1)
+    //
+    //   <div class="an-reveal">
+    //     <div class="an an-fadeInUp">…</div>
+    //   </div>
+    // =====================================================================
+
+    /* @support-status  limited
+     * @feature         animation-trigger / timeline-trigger
+     * @browsers        Chrome 145+ only; not in Safari or Firefox
+     * @fallback        Tier 2 style-query latch, then Tier 0 (content visible)
+     * @checked         2026-09-04
+     * @source          https://developer.chrome.com/blog/scroll-triggered-animations
+     */
+    @supports #{$tier3} {
+      // The ACTIVATION range is not the animation range, and reusing the scrub
+      // range here is a real bug. `entry 0% entry 100%` (which Chrome
+      // normalises to `entry`) describes only the entry PHASE: a trigger set
+      // to it is already past its window once the element is fully visible, so
+      // a play-once reveal does not fire for anything that arrives in view
+      // without scrolling through the entry band — a jump link, a restored
+      // scroll position, or content that starts on screen.
+      //
+      // "While the element is in view" is `entry 100% exit 0%`, which is what a
+      // reveal actually means. Separate tokens, so tuning a scrub range cannot
+      // silently break a trigger. Verified in Chrome 151.
+      #{s("reveal")} {
+        timeline-trigger: --#{p()}-t view() #{v(trigger-start, entry 100%)}
+          #{v(trigger-end, exit 0%)};
+        trigger-scope: --#{p()}-t;
+      }
+
+      #{s("reveal")} > .#{p()} {
+        animation-trigger: --#{p()}-t play-once;
+      }
+      #{s("reveal-replay")} > .#{p()} {
+        animation-trigger: --#{p()}-t replay;
+      }
+      #{s("reveal-both")} > .#{p()} {
+        animation-trigger: --#{p()}-t play-forwards play-backwards;
+      }
+      #{s("reveal-reset")} > .#{p()} {
+        animation-trigger: --#{p()}-t play-forwards reset;
+      }
+      #{s("reveal-hold")} > .#{p()} {
+        animation-trigger: --#{p()}-t play pause;
+      }
+
+      // Single-element convenience form. Tier 2 cannot express it.
+    }
+
+    /* @support-status  limited
+     * @feature         animation-timeline: view() + @container style()
+     * @browsers        Chrome 115+, Safari 26+; Firefox behind a flag as of 152
+     * @fallback        Tier 0 — content renders finished and readable
+     * @checked         2026-09-04
+     * @source          https://ryanmulligan.dev/blog/scroll-triggered-animations-style-queries/
+     *
+     * The `not` on Tier 3 is mandatory: @supports (animation-timeline: view())
+     * is TRUE in Chrome 145, so without it the native trigger and this latch
+     * both apply to the same element and fight.
+     */
+    @supports #{$tier2} {
+      #{s("reveal")},
+      #{s("reveal-replay")},
+      #{s("reveal-both")},
+      #{s("reveal-reset")},
+      #{s("reveal-hold")} {
+        animation-name: #{kf("latch")};
+        animation-timing-function: steps(1);
+        animation-fill-mode: both;
+        animation-duration: 1ms;
+        animation-timeline: view(#{v(axis, block)});
+        animation-range: #{v(range-start, entry 0%)} #{v(range-end, entry 100%)};
+      }
+
+      @keyframes #{kf("latch")} {
+        to {
+          #{prop(on)}: 1;
+        }
+      }
+
+      // ORDER MATTERS. The paused default and the @container override have
+      // identical specificity, so if the container query were declared above
+      // this rule, `paused` would win on source order and nothing would ever
+      // play. Do not reorder these two blocks.
+      #{s("reveal")} > .#{p()},
+      #{s("reveal-replay")} > .#{p()},
+      #{s("reveal-both")} > .#{p()},
+      #{s("reveal-reset")} > .#{p()},
+      #{s("reveal-hold")} > .#{p()} {
+        animation-play-state: paused;
+      }
+
+      @container style(#{prop(on)}: 1) {
+        #{s("reveal")} > .#{p()},
+        #{s("reveal-replay")} > .#{p()},
+        #{s("reveal-both")} > .#{p()},
+        #{s("reveal-reset")} > .#{p()},
+        #{s("reveal-hold")} > .#{p()} {
+          animation-play-state: running;
+        }
+      }
+    }
+
+    // Tier 0 needs no rule at all: with neither block applied, the child is a
+    // plain .an element that animates once on load. `an-reveal-fallback-play`
+    // exists only to make that explicit in markup.
+
+    // =====================================================================
+    // an-scrub-* — progress follows the scrollbar
+    // =====================================================================
+    @supports (animation-timeline: view()) {
+      $scrubs: (
+        "fade": (o-from: 0, o-to: 1),
+      );
+
+      #{s("scrub")},
+      #{s("scrub-fade")},
+      #{s("scrub-up")},
+      #{s("scrub-down")},
+      #{s("scrub-left")},
+      #{s("scrub-right")},
+      #{s("scrub-scale")},
+      #{s("scrub-rotate")},
+      #{s("scrub-blur")},
+      #{s("scrub-clip")} {
+        animation-duration: 1ms; // ignored on a scroll timeline, but required
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: view(#{v(axis, block)});
+        animation-range: #{v(range-start, entry 0%)} #{v(range-end, cover 40%)};
+      }
+
+      #{s("scrub-fade")} {
+        animation-name: #{kf("scrub-fade")};
+      }
+      #{s("scrub-up")} {
+        animation-name: #{kf("scrub-up")};
+      }
+      #{s("scrub-down")} {
+        animation-name: #{kf("scrub-down")};
+      }
+      #{s("scrub-left")} {
+        animation-name: #{kf("scrub-left")};
+      }
+      #{s("scrub-right")} {
+        animation-name: #{kf("scrub-right")};
+      }
+      #{s("scrub-scale")} {
+        animation-name: #{kf("scrub-scale")};
+      }
+      #{s("scrub-rotate")} {
+        animation-name: #{kf("scrub-rotate")};
+      }
+      #{s("scrub-blur")} {
+        animation-name: #{kf("scrub-blur")};
+      }
+      #{s("scrub-clip")} {
+        animation-name: #{kf("scrub-clip")};
+      }
+
+      @keyframes #{kf("scrub-fade")} {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes #{kf("scrub-up")} {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, #{v(distance, 40px)}, 0);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      @keyframes #{kf("scrub-down")} {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, calc(#{v(distance, 40px)} * -1), 0);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      @keyframes #{kf("scrub-left")} {
+        0% {
+          opacity: 0;
+          transform: translate3d(calc(#{v(distance, 40px)} * -1), 0, 0);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      @keyframes #{kf("scrub-right")} {
+        0% {
+          opacity: 0;
+          transform: translate3d(#{v(distance, 40px)}, 0, 0);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      @keyframes #{kf("scrub-scale")} {
+        0% {
+          opacity: 0;
+          transform: scale3d(#{v(scale-from, 0.85)}, #{v(scale-from, 0.85)}, 1);
+        }
+        100% {
+          opacity: 1;
+          transform: scale3d(1, 1, 1);
+        }
+      }
+      @keyframes #{kf("scrub-rotate")} {
+        0% {
+          opacity: 0;
+          transform: rotate(#{v(angle, 12deg)});
+        }
+        100% {
+          opacity: 1;
+          transform: rotate(0deg);
+        }
+      }
+      @keyframes #{kf("scrub-blur")} {
+        0% {
+          opacity: 0;
+          filter: blur(#{v(blur-from, 12px)});
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+      @keyframes #{kf("scrub-clip")} {
+        0% {
+          clip-path: inset(0 0 100% 0);
+        }
+        100% {
+          clip-path: inset(0 0 0 0);
+        }
+      }
+
+      // ------------------------------------------------------------- parallax
+      #{s("parallax")} {
+        animation-name: #{kf("parallax")};
+        animation-duration: 1ms;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: view(#{v(axis, block)});
+        animation-range: cover 0% cover 100%;
+        will-change: transform;
+      }
+      @keyframes #{kf("parallax")} {
+        0% {
+          transform: translate3d(0, calc(#{v(parallax-depth, 1)} * 12vh), 0);
+        }
+        100% {
+          transform: translate3d(0, calc(#{v(parallax-depth, 1)} * -12vh), 0);
+        }
+      }
+
+      // ------------------------------------------------- scroll progress bars
+      #{s("progress-bar")} {
+        animation-name: #{kf("progress")};
+        animation-duration: 1ms;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: scroll(root #{v(axis, block)});
+        transform-origin: 0 50%;
+      }
+      @keyframes #{kf("progress")} {
+        0% {
+          transform: scaleX(0);
+        }
+        100% {
+          transform: scaleX(1);
+        }
+      }
+
+      #{s("progress-ring")} {
+        animation-name: #{kf("progress-ring")};
+        animation-duration: 1ms;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: scroll(root #{v(axis, block)});
+      }
+      @keyframes #{kf("progress-ring")} {
+        0% {
+          #{prop(pos)}: 0%;
+        }
+        100% {
+          #{prop(pos)}: 100%;
+        }
+      }
+
+      // --------------------------------------------------- named timelines
+      #{s("timeline-source")} {
+        view-timeline-name: #{v(timeline-name, --an-tl)};
+        timeline-scope: #{v(timeline-name, --an-tl)};
+      }
+      #{s("timeline-target")} {
+        animation-timeline: #{v(timeline-name, --an-tl)};
+      }
+
+      // ------------------------------------------------------- sticky stack
+      #{s("sticky-stack")} > * {
+        position: sticky;
+        top: #{v(sticky-top, 6vh)};
+        animation-name: #{kf("sticky-shrink")};
+        animation-duration: 1ms;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: view(#{v(axis, block)});
+        animation-range: exit 0% exit 100%;
+      }
+      @keyframes #{kf("sticky-shrink")} {
+        to {
+          transform: scale(0.92);
+          opacity: 0.6;
+        }
+      }
+
+      // ------------------------------------------------------- hero shrink
+      #{s("hero-shrink")} {
+        animation-name: #{kf("hero-shrink")};
+        animation-duration: 1ms;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: scroll(root block);
+        animation-range: 0 30vh;
+      }
+      @keyframes #{kf("hero-shrink")} {
+        to {
+          transform: scale(0.85);
+          opacity: 0.75;
+        }
+      }
+    }
+
+    // ----------------------------------------------------- non-timeline helpers
+    // These work everywhere — they are ordinary CSS, listed here because they
+    // belong to the scroll story.
+    #{s("snap-x")} {
+      scroll-snap-type: x mandatory;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
+    #{s("snap-y")} {
+      scroll-snap-type: y mandatory;
+      overflow-y: auto;
+    }
+    #{s("snap-start")} {
+      scroll-snap-align: start;
+    }
+    #{s("snap-center")} {
+      scroll-snap-align: center;
+    }
+    #{s("smooth")} {
+      scroll-behavior: smooth;
+    }
+  }
+}
